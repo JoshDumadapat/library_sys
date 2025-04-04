@@ -1,0 +1,325 @@
+/* Navbar Styling */
+.navbar {
+    background-color: #f8f9fa; /* Light background */
+    padding: 0px; /* Add some padding */
+    box-shadow: 0px 5px 10px rgba(197, 197, 197, 0.6) !important;
+
+    position: relative;
+    z-index: 10;
+}
+
+/* Navbar Brand */
+.navbar-brand {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: black;
+    font-family: Arial, sans-serif;
+}
+
+/* Navbar Links */
+.navbar-nav .nav-link {
+    position: relative;
+    font-size: 0.9rem;
+    font-family: Arial, sans-serif;
+    color: black;
+    text-transform: uppercase;
+    margin: 0 15px; /* Spacing between links */
+    padding: 5px 0; /* Adjust padding */
+    transition: color 0.3s ease-in-out;
+}
+
+/* Hover Animation */
+.navbar-nav .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background-color: rgb(4, 78, 121); /* Line color */
+    transition: width 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+    color: rgb(4, 78, 121);
+}
+
+.navbar-nav .nav-link:hover::after {
+    width: 100%;
+}
+/* Sign In Button - Outline by default */
+.btn-signin {
+    background-color: transparent; /* Transparent background */
+    color: #222222 !important; /* Blue text */
+    border: 1px solid #235872; /* Blue border */
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: normal;
+    font-size: 14px;
+    text-transform: uppercase;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover Effect: Filled with blue, text becomes white */
+.btn-signin:hover {
+    background-color: #235872; /* Filled blue */
+    color: white !important; /* White text */
+}
+
+/* Animated Underline Effect - Optional (can be removed if not needed) */
+.btn-signin::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: white;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-signin:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+.logo {
+    height: 60px; /* Adjust size as needed */
+    width: auto;
+}
+/* Homepage section */
+.homepage {
+    position: relative;
+    width: 100%;
+    height: 50vh; /* 50% of the screen height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    text-align: center; /* Ensure content stays centered */
+}
+
+/* Background Image */
+.homepage-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Lower z-index to keep it in the background */
+}
+
+/* Overlay to darken image for better readability */
+.overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 2; /* Ensure it's above the image */
+}
+
+/* Animated Text */
+.animated-text {
+    font-size: 4rem; /* Bigger font size */
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+    opacity: 0; /* Initially hidden */
+    transform: translateY(50px); /* Start below */
+    animation: riseAnimation 1.5s ease-out forwards;
+    z-index: 3; /* Highest z-index */
+    font-family: "Open Sans", sans-serif; /* Use Open Sans font */
+    letter-spacing: 10px; /* More spacing between characters */
+    margin-bottom: 20px; /* Space between text and button */
+}
+
+/* Keyframe Animation */
+@keyframes riseAnimation {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Sign Up Button */
+.btn-signup {
+    background-color: #000000; /* Custom Blue */
+    color: white;
+    border: 0.1px solid #bdbdbd;
+    padding: 12px 30px;
+    border-radius: 30px; /* Fully rounded for a softer look */
+    font-weight: bold;
+    font-size: 12px;
+    transition: background-color 0.3s ease, transform 0.3s ease,
+        box-shadow 0.3s ease;
+    z-index: 3;
+    position: relative;
+}
+
+/* Hover Effect */
+.btn-signup:hover {
+    background-color: transparent;
+    color: white;
+    transform: translateY(-3px); /* Slight lift effect */
+    box-shadow: 0 5px 15px rgba(35, 88, 114, 0.3); /* Soft shadow for depth */
+}
+
+/* Load fonts from Google Fonts (example) */
+/* Place these in your HTML <head> if not already loaded */
+@import url("https://fonts.googleapis.com/css2?family=Glacial+Indifference&family=Open+Sans:ital,wght@0,400;1,400&display=swap");
+
+/* Main Text Styling */
+.main-text {
+    font-size: 4.3rem; /* Increased size */
+    color: #235872;
+    font-family: "Open Sans", sans-serif;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-transform: uppercase; /* Capitalize all letters */
+    letter-spacing: 2px; /* Optional: adjust for spacing between characters */
+}
+
+.sub-text {
+    font-size: 1.2rem; /* Smaller text */
+    color: #101010;
+    font-family: "Open Sans", sans-serif;
+    font-style: italic;
+}
+
+/* Container for overlay effect */
+.img-overlay-container {
+    position: relative;
+    display: inline-block;
+    transform: scale(0.9);
+}
+
+/* Button positioned over the image */
+.overlay-button {
+    position: absolute;
+    bottom: 120px; /* Adjust this value to move the button vertically */
+    left: 20%;
+    transform: translateX(-50%);
+    z-index: 2;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #246484; /* Updated button color */
+    color: white; /* White text for contrast */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover effect for overlay button */
+.overlay-button:hover {
+    background-color: #1f5677; /* Slightly darker shade on hover */
+    transform: translateX(-50%) translateY(-3px); /* Slight lift on hover */
+}
+
+/*--------booooookkkkk-----*/
+
+.book-carousel {
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    height: 400px;
+}
+.swiper-slide {
+    width: 200px;
+    text-align: center;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.8;
+}
+.swiper-slide img {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.swiper-slide-active {
+    transform: scale(1.2);
+    opacity: 1;
+}
+.swiper-slide-next,
+.swiper-slide-prev {
+    transform: scale(1);
+    opacity: 0.9;
+}
+.swiper-slide-next + .swiper-slide,
+.swiper-slide-prev ~ .swiper-slide:last-child {
+    transform: scale(0.9);
+    opacity: 0.7;
+}
+.swiper-button-prev,
+.swiper-button-next {
+    color: #852b2b;
+}
+.book-card {
+    position: relative;
+    overflow: hidden;
+    height: 350px;
+    transition: transform 0.3s ease;
+}
+
+.book-card img {
+    padding-top: 5px;
+    transition: transform 0.3s ease; /* Add transition for smooth scaling */
+}
+
+.book-card:hover img {
+    transform: scale(1.02); /* Enlarge only the image */
+}
+
+.borrow-btn {
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 16px;
+    background-color: #f06e51;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.book-card:hover .borrow-btn {
+    opacity: 1;
+}
+
+/*--------booooookkkkk-----*/
+
+.browse-text {
+    font-size: 1.8rem; /* Increased size */
+    color: #235872;
+    font-family: "Open Sans", sans-serif;
+    margin-bottom: 30px;
+    font-weight: bold;
+    text-transform: uppercase; /* Capitalize all letters */
+    letter-spacing: 2px; /* Optional: adjust for spacing between characters */
+}
+
+.about-text {
+    font-size: 3rem; /* Increased size */
+    color: #235872;
+    font-family: "Open Sans", sans-serif;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-transform: uppercase; /* Capitalize all letters */
+    letter-spacing: 2px; /* Optional: adjust for spacing between characters */
+}
