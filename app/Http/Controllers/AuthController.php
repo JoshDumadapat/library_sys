@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash; // Add this line
 use App\Models\User;
+use App\Models\Address;
 
 class AuthController extends Controller
 {
@@ -19,22 +20,37 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'contact_num' => 'required|string|max:15',
+            'street' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'region' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6|confirmed',
         ]);
 
         // Create new user
         $user = User::create([
-            'name' => $request->name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'contact_num' => $request->contact_num,
+            'role' => 'member',
             'email' => $request->email,
             'password' => Hash::make($request->password),
+        ]);
+
+        Address::create([
+            'user_id' => $user->id,
+            'street' => $request->street,
+            'city' => $request->city,
+            'region' => $request->region,
         ]);
 
         // Auto-login after registration
         Auth::login($user);
 
-        return redirect()->route('dashboard')->with('success', 'Registration successful!');
+        return redirect()->route('member.dashboard')->with('success', 'Registration successful!');
     }
 
     // Show the login form
@@ -54,12 +70,17 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->route('dashboard')->with('success', 'Login successful!');
+            // Check the user's role
+            $user = Auth::user();
+            if ($user->role == 'admin') {
+                return redirect()->route('admin.dashboard')->with('success', 'Welcome Admin!');
+            } elseif ($user->role == 'member') {
+                return redirect()->route('member.dashboard')->with('success', 'Welcome Member!');
+            }
         }
 
         return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
     }
-
     // Handle logout
     public function logout(Request $request)
     {

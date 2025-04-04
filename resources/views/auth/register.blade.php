@@ -134,9 +134,9 @@
                                         <div class="col-md-4 text-start"><small>Contact No. <span style="color: red;">*</span></small></div>
                                     </div>
                                     <div class="row mb-4">
-                                        <div class="col-md-4"><input type="text" id="fname" name="fname" value="{{ old('fname') }}" class="form-control" required></div>
-                                        <div class="col-md-4"><input type="text" id="lname" name="lname" value="{{ old('lname') }}" class="form-control" required></div>
-                                        <div class="col-md-4"><input type="text" id="contact_no" name="contact_no" value="{{ old('contact_no') }}" class="form-control" required minlength="11" maxlength="11"></div>
+                                        <div class="col-md-4"><input type="text" id="first_name" name="first_name" value="{{ old('first_name') }}" class="form-control" required></div>
+                                        <div class="col-md-4"><input type="text" id="last_name" name="last_name" value="{{ old('last_name') }}" class="form-control" required></div>
+                                        <div class="col-md-4"><input type="text" id="contact_num" name="contact_num" value="{{ old('contact_num') }}" class="form-control" required minlength="11" maxlength="11"></div>
                                     </div>
 
                                     <div class="row mb-1">
