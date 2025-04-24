@@ -65,7 +65,7 @@
             /* ✅ Astronaut positioned OUTSIDE login-container */
             .astronaut1 {
                 position: fixed;
-                top: 25%;
+                top: 17%;
                 left: 33%;
                 width: 310px;
                 z-index: 10;
@@ -75,9 +75,9 @@
 
             .astronaut2 {
                 position: fixed;
-                top: 58%;
-                left: 8%;
-                width: 340px;
+                top: 50%;
+                left: 10%;
+                width: 360px;
                 z-index: 10;
                 /* Ensures it's above everything */
                 pointer-events: none;

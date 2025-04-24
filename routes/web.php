@@ -27,13 +27,16 @@ Route::post('/register', [AuthController::class, 'register']);
 
 // Protected Routes Group
 Route::middleware('auth')->group(function () {
-    // Admin Dashboard
-    // Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-
+    // Admin Routes
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/manage-books', [AdminController::class, 'manageBooks'])->name('admin.manageBooks');
+    Route::get('/admin/lend', [AdminController::class, 'lend'])->name('admin.lend');
+    Route::get('/admin/return', [AdminController::class, 'return'])->name('admin.return');
+    Route::get('/admin/members', [AdminController::class, 'members'])->name('admin.members');
+    Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report');
+    Route::get('/admin/employees', [AdminController::class, 'employees'])->name('admin.employees');
+    Route::get('/admin/settings', [AdminController::class, 'settings'])->name('admin.settings');
 
-
-
-    // Member Dashboard
+    // Member Routes
     Route::get('/member/dashboard', [MemberController::class, 'index'])->name('member.dashboard');
 });

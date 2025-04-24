@@ -1,0 +1,494 @@
+/* Existing styles for the sidebar */
+.sidebar-card {
+    margin: 12px;
+    margin-left: 12px;
+    padding: 0;
+    height: calc(100% - 24px);
+    background-color: #246484;
+    border-radius: 12px;
+    border: 0.04;
+    border-color: #000000;
+    border-width: 0.01;
+}
+
+.sidebar-logo {
+    padding-top: 16px;
+    padding-bottom: 8px;
+    text-align: center; /* Center the logo content */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar-logo-icon {
+    width: 70px; /* Adjust as needed */
+    margin-right: 10px; /* Space between icon and label */
+}
+
+.sidebar-logo-label {
+    max-width: 150px; /* Adjust as needed */
+}
+
+.sidebar-hr {
+    border: none;
+    border-top: 1px solid #ffffff; /* White color for the line */
+    margin: 10px 0; /* Adjust margin to control the spacing above and below */
+    width: 90%; /* Adjust width as needed */
+    margin-left: auto;
+    margin-right: auto; /* Center the <hr> within the container */
+}
+
+/* Sidebar Menu */
+.sidebar-menu {
+    padding: 0px 0;
+}
+
+/* Sidebar Item */
+.sidebar-item {
+    display: flex;
+    align-items: start;
+    padding: 10px 20px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: #e8e8e8;
+    transition: background-color 0.3s, margin 0.3s, border-radius 0.3s; /* Smooth transition for background color, margin, and border-radius */
+}
+
+.sidebar-item:hover {
+    background-color: #1f4d63;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 8px; /* Add border radius on hover */
+}
+
+/* Sidebar Icon */
+.sidebar-icon {
+    margin-right: 15px; /* Space between icon and text (15px apart) */
+    width: 22px; /* Adjust icon size */
+}
+
+/* Sidebar Collapse and Hover Behavior */
+.sidebar-wrapper {
+    width: 90px; /* Initially collapsed width */
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+.sidebar-wrapper.collapsed {
+    width: 100px; /* Sidebar collapsed width */
+}
+
+.sidebar-wrapper:hover {
+    width: 280px; /* Sidebar expands on hover */
+}
+
+/* Sidebar Logo in Collapsed State */
+.sidebar-wrapper.collapsed .sidebar-logo-icon {
+    margin-right: 0;
+}
+
+.sidebar-wrapper.collapsed .sidebar-logo-label {
+    display: none; /* Hide label in collapsed state */
+}
+
+/* Sidebar Items Alignment */
+.sidebar-wrapper.collapsed .sidebar-item span {
+    display: none; /* Hide text in collapsed state */
+}
+
+.sidebar-wrapper.collapsed .sidebar-icon {
+    margin-left: 0;
+    margin-right: start;
+}
+
+/* Sidebar Item Text Visibility on Hover */
+.sidebar-wrapper:hover .sidebar-item span,
+.sidebar-wrapper:hover .sidebar-logo-label {
+    display: inline-block; /* Show text when hovered */
+}
+
+/* Adjust the icon margin-left when sidebar expands */
+.sidebar-wrapper:hover .sidebar-icon {
+    margin-left: 10px; /* Adjust icon margin on the left when expanded */
+}
+
+/* Content Area Adjustments */
+.content-column {
+    transition: margin-left 0.3s ease;
+    width: calc(100% - 240px); /* Full width minus sidebar */
+    padding-left: 20px; /* Adjust padding to prevent overlap with sidebar */
+}
+
+.sidebar-wrapper.collapsed ~ .content-column {
+    width: calc(100% - 80px); /* Content width when sidebar is collapsed */
+}
+
+@media (max-width: 991.98px) {
+    .sidebar-wrapper {
+        width: 100%;
+    }
+
+    .sidebar-wrapper.collapsed {
+        width: 60px; /* Reduced width for mobile screens */
+    }
+
+    .content-column {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    /* Collapse behavior for mobile */
+    .sidebar-wrapper.collapsed .sidebar-item span,
+    .sidebar-wrapper.collapsed .sidebar-logo-label {
+        display: none; /* Hide text in collapsed sidebar for small screens */
+    }
+
+    .sidebar-wrapper.collapsed .sidebar-icon {
+        margin: 0 auto;
+    }
+
+    .sidebar-wrapper.collapsed .sidebar-item {
+        justify-content: center;
+    }
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 56px;
+    height: 30px;
+    margin-right: 15px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #246484;
+    transition: background-color 0.4s;
+    border-radius: 34px;
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+/* Icon circle that slides */
+.icon-toggle {
+    position: absolute;
+    left: 4px;
+    bottom: 4px;
+    width: 22px;
+    height: 22px;
+    background-color: rgb(242, 242, 242);
+    border-radius: 50%;
+    font-size: 17px;
+    color: #f1c40f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.4s ease, background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Move the circle to the right on toggle */
+input:checked + .slider .icon-toggle {
+    transform: translateX(26px);
+    color: #8b36f3;
+}
+
+input:checked + .slider {
+    background-color: #494949;
+}
+
+/* Profile design */
+.profile-img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    border-color: #eeb108;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Hide dropdown by default */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.tooltip-inner {
+    background-color: rgb(232, 229, 229) !important;
+    color: rgb(0, 0, 0) !important;
+    padding: 8px !important;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.tooltip.bs-tooltip-bottom .tooltip-arrow {
+    border-bottom-color: rgb(129, 128, 128) !important;
+}
+
+/* ------- DARK MODE CSS -------*/
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #181818;
+    color: #e8e8e8;
+}
+
+body.dark-mode .sidebar-wrapper {
+    background-color: #181818;
+    border-color: #494949;
+}
+
+body.dark-mode .sidebar-card {
+    background-color: #2e2e2e;
+    border-width: 0.001;
+    border-color: #494949;
+}
+
+body.dark-mode .card {
+    background-color: #2e2e2e;
+    color: #ffffff;
+    border-color: #494949;
+    border-width: 0.01;
+}
+
+.btn-dashboard {
+    background-color: #000000;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 12px;
+    transition: background-color 0.3s ease, transform 0.3s ease,
+        box-shadow 0.3s ease;
+    z-index: 3;
+    position: relative;
+}
+
+.btn-dashboard:hover {
+    background-color: #333333;
+    transform: scale(1.05);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.book-dashboard {
+    max-width: 420px;
+    height: auto;
+    animation: float1 6s ease-in-out infinite;
+    flex-shrink: 0;
+    margin-bottom: 40px;
+    margin-left: 5%;
+    margin-top: 10%;
+    filter: drop-shadow(8px 8px 5px rgba(0, 0, 0, 0.6)); /* Larger shadow */
+}
+
+@media (max-width: 768px) {
+    .book-dashboard {
+        max-width: 200px;
+        margin: 0 auto 20px auto;
+        display: block;
+        margin-left: 60px;
+    }
+
+    .text-container {
+        text-align: center;
+    }
+
+    .btn-dashboard {
+        padding-left: 40px !important;
+        padding-right: 40px !important;
+    }
+
+    .card-img-overlay {
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center;
+    }
+}
+
+.card-hover {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.table-container {
+    margin-top: 20px;
+}
+
+.section-title {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+}
+
+.custom-table th,
+.custom-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    color: white;
+}
+
+/* Add Book Button */
+.btn-add {
+    background-color: #246484;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-add:hover {
+    background-color: #1b4d66;
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    color: white;
+}
+
+/* View Button */
+.btn-view {
+    background-color: rgb(126, 126, 126);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-view:hover {
+    background-color: rgb(106, 106, 106);
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    color: white;
+}
+
+/* Delete Button */
+.btn-delete {
+    background-color: #dc3545;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-delete:hover {
+    background-color: #bb2d3b;
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    color: white;
+}
+
+/* Success Button */
+.btn-addbook {
+    background-color: #246484;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-addbook:hover {
+    background-color: #1b4d66;
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    color: white;
+}
+
+.btn-edit {
+    background-color: rgb(238, 182, 13);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-edit:hover {
+    background-color: rgb(186, 140, 1);
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    color: white;
+}
+
+.form-container {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#pagination .btn {
+    color: #246484;
+    background-color: white;
+    border-color: #0d6efd;
+    opacity: 1;
+    /* Make sure all buttons are visible */
+}
+
+#pagination .btn:hover:not(.active) {
+    background-color: #e7f1ff;
+    border-color: #0d6efd;
+}
+
+#pagination .btn.active {
+    background-color: #246484;
+    color: white;
+    border-color: #0d6efd;
+}
+
+#pagination .btn:disabled {
+    background-color: #f8f9fa;
+    color: #adb5bd;
+    border-color: #dee2e6;
+    opacity: 1;
+    /* Keep them visible */
+    cursor: not-allowed;
+}

@@ -1,9 +1,9 @@
 <x-layout>
-    <section class="homepage shadow">
+    <section class="homepage  ">
         <div class="overlay">
             <img src="{{ asset('storage/images/hero.jpg') }}" alt="LunaBooks Homepage" class="homepage-image">
             <h1 class="animated-text">L U N A B O O K S</h1>
-            <a href="/signup" class="btn-signup" style="text-decoration: none; ">Click here to get started</a>
+            <a href="/register" class="btn-signup" style="text-decoration: none; ">Click here to get started</a>
 
         </div>
     </section>
@@ -22,7 +22,7 @@
                 <div class="col-md-6 text-center">
                     <div class="img-overlay-container">
                         <img src="{{ asset('storage/images/homeImg.jpg') }}" alt="Descriptive Alt Text" class="img-fluid">
-                        <a href="/signup" class="btn overlay-button " style="text-decoration: none; color:white">Click here to get started</a>
+                        <a href="/login" class="btn overlay-button " style="text-decoration: none; color:white">Borrow Now</a>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
     </section>
 
 
-    <section>
+    <section id="about">
         <div class="container my-5">
             <div class="row align-items-center">
                 <!-- Column 2: Image and Button -->

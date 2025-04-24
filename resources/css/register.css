@@ -1,0 +1,133 @@
+body {
+    background: url("{{ asset('storage/images/registerbg.jpg') }}") no-repeat
+        center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    font-family: Arial, sans-serif;
+}
+
+.login-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 70%;
+    min-height: 600px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgba(202, 202, 202, 0.2);
+    backdrop-filter: blur(10px);
+    margin: 5% auto;
+    position: relative;
+    z-index: 5;
+}
+
+.left-container,
+.right-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    position: relative;
+    z-index: 2;
+    min-width: 300px;
+}
+
+.left-container {
+    flex: 1;
+    max-width: 350px;
+    background: linear-gradient(135deg, #1983b6, #235872);
+    color: white;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.right-container {
+    flex: 2;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.astronaut-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row-reverse;
+}
+
+.astronaut-inside {
+    width: 230px;
+    height: auto;
+    animation: float1 6s ease-in-out infinite;
+    flex-shrink: 0;
+    margin-bottom: 40px;
+    /* or something smaller like 10px */
+    margin-left: -30px;
+    /* optional, fine-tune spacing between text and image */
+}
+
+@keyframes float1 {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+        width: 90%;
+        height: auto;
+    }
+
+    .left-container,
+    .right-container {
+        width: 100%;
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    .left-container {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        border-bottom-left-radius: 0;
+        align-items: center;
+        text-align: center;
+    }
+
+    .astronaut-header {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: row-reverse;
+    }
+
+    .astronaut-inside {
+        width: 180px;
+        height: auto;
+        animation: float1 6s ease-in-out infinite;
+        flex-shrink: 0;
+        margin-bottom: 20px;
+        margin-left: 30px;
+    }
+}
