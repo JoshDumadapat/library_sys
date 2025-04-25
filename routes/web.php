@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\AdminMemberController;
 
 // Homepage
 Route::get('/', function () {
@@ -40,3 +41,12 @@ Route::middleware('auth')->group(function () {
     // Member Routes
     Route::get('/member/dashboard', [MemberController::class, 'index'])->name('member.dashboard');
 });
+
+// Route for displaying the members list
+Route::get('/admin/members', [AdminMemberController::class, 'index'])->name('admin.members');
+
+// Route for deactivating a member
+Route::post('/admin/members/{member}/deactivate', [AdminMemberController::class, 'deactivate'])->name('admin.members.deactivate');
+
+// Route for activating a member
+Route::post('/admin/members/{member}/activate', [AdminMemberController::class, 'activate'])->name('admin.members.activate');

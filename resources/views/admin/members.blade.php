@@ -40,33 +40,44 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Sample Row 1 -->
-                            <tr>
-                                <td>1</td>
-                                <td>F. Scott Fitzgerald</td>
-                                <td>1-2-2025</td>
-                                <td>1-10-2025</td>
-                                <td>3</td>
-                                <td><span class="badge bg-warning text-black">Inactive</span></td>
-                                <td>
-                                    <button id="lending-detail" class="btn btn-delete" style="border-radius: 8px;"><i class="bi bi-person-x me-1"></i>&nbsp;Deactivate</button>
-                                    <button class="btn btn-add" style="border-radius: 8px;"><i class="bi bi-person-check me-1"></i>Activate</button>
-                                </td>
-                            </tr>
-                            <!-- Sample Row 2 -->
-                            <tr>
-                                <td>23</td>
-                                <td>F. Scott Fitzgerald</td>
-                                <td>1-2-2025</td>
-                                <td>1-10-2025</td>
-                                <td>3</td>
-                                <td><span class="badge bg-success">Active</span></td>
-                                <td>
-                                    <button id="lending-detail" class="btn btn-delete" style="border-radius: 8px;"><i class="bi bi-person-x me-1"></i>&nbsp;Deactivate</button>
-                                    <button class="btn btn-add" style="border-radius: 8px;"><i class="bi bi-person-check me-1"></i>Activate</button>
-                                </td>
-                            </tr>
+                        @foreach($members as $member)
+                                <tr>
+                                    <td>{{ $member->id }}</td>
+                                    <td>{{ $member->first_name }} {{ $member->last_name }}</td>
+                                    <td>{{ $member->email }}</td>
+                                    <td>{{ $member->contact_num }}</td>
+                                    <td>
+                                        {{ $member->address->street ?? '' }},
+                                        {{ $member->address->city ?? '' }},
+                                        {{ $member->address->province ?? '' }}
+                                    </td>
+
+                                    <td>
+                                        @if($member->status === 'Active')
+                                            <span class="badge bg-success">Active</span>
+                                        @else
+                                            <span class="badge bg-warning text-black">Inactive</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('admin.members.deactivate', $member->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-delete" style="border-radius: 8px;">
+                                                <i class="bi bi-person-x me-1"></i>&nbsp;Deactivate
+                                            </button>
+                                        </form>
+
+                                        <form action="{{ route('admin.members.activate', $member->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-add" style="border-radius: 8px;">
+                                                <i class="bi bi-person-check me-1"></i>Activate
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
+
                     </table>
                 </div>
             </div>
