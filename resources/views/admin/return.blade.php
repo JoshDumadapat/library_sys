@@ -48,7 +48,10 @@
                                 <td>3</td>
                                 <td><span class="badge bg-warning text-black">Pending</span></td>
                                 <td>
-                                    <button id="lending-detail" class="btn btn-view" style="border-radius: 5px;">View Details</button>
+                                <button id="lending-detail" class="btn btn-view" style="border-radius: 5px;">
+                                    <i class="bi bi-eye me-1"></i>&nbsp;View Details
+                                </button>
+
                                 </td>
                             </tr>
                             <!-- Sample Row 2 -->
@@ -60,7 +63,7 @@
                                 <td>3</td>
                                 <td><span class="badge bg-danger">Overdue</span></td>
                                 <td>
-                                    <button class="btn btn-view" style="border-radius: 5px;">View Details</button>
+                                    <button class="btn btn-view" style="border-radius: 5px;"><i class="bi bi-eye me-1"></i>&nbsp;View Details</button>
                                 </td>
                             </tr>
                         </tbody>

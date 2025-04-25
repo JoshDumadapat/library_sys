@@ -49,8 +49,8 @@
                                 <td>3</td>
                                 <td><span class="badge bg-warning text-black">Inactive</span></td>
                                 <td>
-                                    <button id="lending-detail" class="btn btn-delete" style="border-radius: 8px;">Deactivate</button>
-                                    <button class="btn btn-add" style="border-radius: 8px;">Activate</button>
+                                    <button id="lending-detail" class="btn btn-delete" style="border-radius: 8px;"><i class="bi bi-person-x me-1"></i>&nbsp;Deactivate</button>
+                                    <button class="btn btn-add" style="border-radius: 8px;"><i class="bi bi-person-check me-1"></i>Activate</button>
                                 </td>
                             </tr>
                             <!-- Sample Row 2 -->
@@ -62,8 +62,8 @@
                                 <td>3</td>
                                 <td><span class="badge bg-success">Active</span></td>
                                 <td>
-                                    <button id="lending-detail" class="btn btn-delete" style="border-radius: 8px;">Deactivate</button>
-                                    <button class="btn btn-add" style="border-radius: 8px;">Activate</button>
+                                    <button id="lending-detail" class="btn btn-delete" style="border-radius: 8px;"><i class="bi bi-person-x me-1"></i>&nbsp;Deactivate</button>
+                                    <button class="btn btn-add" style="border-radius: 8px;"><i class="bi bi-person-check me-1"></i>Activate</button>
                                 </td>
                             </tr>
                         </tbody>
