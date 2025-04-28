@@ -58,7 +58,7 @@
     background-color: #1f4d63;
     margin-left: 10px;
     margin-right: 10px;
-    border-radius: 8px; /* Add border radius on hover */
+    border-radius: 8px;  
 }
 
 /* Sidebar Icon */
@@ -288,6 +288,34 @@ body.dark-mode .card {
     border-width: 0.01;
 }
 
+/* ------- DARK MODE PAGINATION ------- */
+body.dark-mode #pagination .btn {
+    color: #7cb8e3; 
+    background-color: #2e2e2e; 
+    border-color: #494949; 
+    opacity: 1;
+}
+
+body.dark-mode #pagination .btn:hover:not(.active) {
+    background-color: #3e3e3e; 
+    border-color: #0d6efd; 
+}
+
+body.dark-mode #pagination .btn.active {
+    background-color: #246484; 
+    color: white; 
+    border-color: #0d6efd; 
+}
+
+body.dark-mode #pagination .btn:disabled {
+    background-color: #444; 
+    color: #888; 
+    border-color: #555;
+    opacity: 1;
+    cursor: not-allowed; 
+}
+
+
 .btn-dashboard {
     background-color: #000000;
     color: white;
@@ -489,6 +517,5 @@ body.dark-mode .card {
     color: #adb5bd;
     border-color: #dee2e6;
     opacity: 1;
-    /* Keep them visible */
     cursor: not-allowed;
 }

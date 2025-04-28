@@ -35,7 +35,7 @@
 
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="book-table-body">
                             <!-- Sample Row 1 -->
                             <tr>
                                 <td>1</td>
@@ -63,7 +63,10 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="d-flex justify-content-center mt-3" id="pagination">
+                </div>
             </div>
         </div>
     </div>
 </x-sidebar>
+@vite('resources/js/pagination.js') 

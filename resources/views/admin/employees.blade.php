@@ -36,10 +36,10 @@
                                 <th>Contact</th>
                                 <th>Address</th>
                                 <th>Role</th>
-                                <th>Actions</th> 
+                                <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="book-table-body"> 
                             <tr>
                                 <td>1</td>
                                 <td>F. Scott Fitzgerald</td>
@@ -48,12 +48,14 @@
                                 <td>Davao City</td>
                                 <td>Librarianitor</td>
                                 <td>
-                                    <button id="lending-detail" class="btn btn-view" style="border-radius: 8px;"><i class="bi bi-eye me-1"></i>&nbsp;View</button>
+                                    <button id="lending-detail" class="btn btn-view" data-bs-toggle="modal" data-bs-target="#bookModal" style="border-radius: 8px;"><i class="bi bi-eye me-1"></i>&nbsp;View</button>
                                     <button class="btn btn-delete" style="border-radius: 8px;"><i class="bi bi-person-x me-1"></i>&nbsp;Deactivate</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="d-flex justify-content-center mt-3" id="pagination">
                 </div>
             </div>
         </div>
@@ -67,184 +69,138 @@
                     <hr class="mb-4">
                 </div>
                 <form action="{{ route('register') }}" method="POST">
-                        @csrf
+                    @csrf
 
-                        <div class="row mb-3 ">
-                            <div class="col-md-4 mb-3">
-                                <small class="text-start d-block">First name <span class="text-danger">*</span></small>
-                                <input type="text" name="first_name" value="{{ old('first_name') }}" class="form-control" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <small class="text-start d-block">Last name <span class="text-danger">*</span></small>
-                                <input type="text" name="last_name" value="{{ old('last_name') }}" class="form-control" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <small class="text-start d-block">Contact No. <span class="text-danger">*</span></small>
-                                <input type="text" name="contact_num" value="{{ old('contact_num') }}" class="form-control" required minlength="11" maxlength="11">
-                            </div>
+                    <div class="row mb-3 ">
+                        <div class="col-md-4 mb-3">
+                            <small class="text-start d-block">First name <span class="text-danger">*</span></small>
+                            <input type="text" name="first_name" value="{{ old('first_name') }}" class="form-control" required>
                         </div>
+                        <div class="col-md-4 mb-3">
+                            <small class="text-start d-block">Last name <span class="text-danger">*</span></small>
+                            <input type="text" name="last_name" value="{{ old('last_name') }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <small class="text-start d-block">Contact No. <span class="text-danger">*</span></small>
+                            <input type="text" name="contact_num" value="{{ old('contact_num') }}" class="form-control" required minlength="11" maxlength="11">
+                        </div>
+                    </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-4 mb-3">
-                                <small class="text-start d-block">Street <span class="text-danger">*</span></small>
-                                <input type="text" name="street" value="{{ old('street') }}" class="form-control" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <small class="text-start d-block">City <span class="text-danger">*</span></small>
-                                <input type="text" name="city" value="{{ old('city') }}" class="form-control" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <small class="text-start d-block">Region <span class="text-danger">*</span></small>
-                                <input type="text" name="region" value="{{ old('region') }}" class="form-control" required>
-                            </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 mb-3">
+                            <small class="text-start d-block">Street <span class="text-danger">*</span></small>
+                            <input type="text" name="street" value="{{ old('street') }}" class="form-control" required>
                         </div>
+                        <div class="col-md-4 mb-3">
+                            <small class="text-start d-block">City <span class="text-danger">*</span></small>
+                            <input type="text" name="city" value="{{ old('city') }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <small class="text-start d-block">Region <span class="text-danger">*</span></small>
+                            <input type="text" name="region" value="{{ old('region') }}" class="form-control" required>
+                        </div>
+                    </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-4 mb-3">
-                                <small class="text-start d-block">Role <span class="text-danger">*</span></small>
-                                <input type="email" name="email" value="{{ old('email') }}" class="form-control" required>
-                            </div>                            <div class="col-md-4 mb-3">
-                                <small class="text-start d-block">Email <span class="text-danger">*</span></small>
-                                <input type="email" name="email" value="{{ old('email') }}" class="form-control" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <small class="text-start d-block">Password <span class="text-danger">*</span></small>
-                                <input type="password" name="password" class="form-control" required>
-                            </div>
-                            <div class="col-md-4 mb-5 ">
-                                <small class="text-start d-block">Confirm Password <span class="text-danger">*</span></small>
-                                <input type="password" name="password_confirmation" class="form-control" required>
-                            </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 mb-3">
+                            <small class="text-start d-block">Role <span class="text-danger">*</span></small>
+                            <input type="email" name="email" value="{{ old('email') }}" class="form-control" required>
                         </div>
-                    </form>
+                        <div class="col-md-4 mb-3">
+                            <small class="text-start d-block">Email <span class="text-danger">*</span></small>
+                            <input type="email" name="email" value="{{ old('email') }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <small class="text-start d-block">Password <span class="text-danger">*</span></small>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+                        <div class="col-md-4 mb-5 ">
+                            <small class="text-start d-block">Confirm Password <span class="text-danger">*</span></small>
+                            <input type="password" name="password_confirmation" class="form-control" required>
+                        </div>
+                    </div>
+                </form>
 
                 <hr>
 
-                <!-- Lending Details -->
+                <!-- Employee Details -->
                 <div class="row mb-4">
                     <div class="col-12 col-md-12 mt-4 text-center">
                         <button class="btn btn-view me-2" id="cancel-btn" style="font-size: 1.1rem;">Cancel</button>
-                        <button class="btn btn-addbook" id="lend-books-btn" style="font-size: 1.1rem;">+ Add Employee</button>
+                        <button class="btn btn-addbook" id="add-employee-btn" style="font-size: 1.1rem;">+ Add Employee</button>
                     </div>
                 </div>
 
             </div>
         </div>
+
+        <!--EDIT MODAL -->
+        <!-- Modal -->
+        <div class="modal fade" id="bookModal" tabindex="-1" aria-labelledby="bookModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                <div class="modal-content" style="border-radius: 12px;">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="bookModalLabel">Edit Employee Information</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="px-4 py-4">
+                            <hr class="mb-4">
+
+                            <div class="row mb-4" style="margin-top: 25px;">
+                                <div class="col-md-4 mb-3">
+                                    <small class="text-start d-block">First name <span class="text-danger">*</span></small>
+                                    <input type="text" name="first_name" value="{{ old('first_name') }}" class="form-control" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <small class="text-start d-block">Last name <span class="text-danger">*</span></small>
+                                    <input type="text" name="last_name" value="{{ old('last_name') }}" class="form-control" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <small class="text-start d-block">Contact No. <span class="text-danger">*</span></small>
+                                    <input type="text" name="contact_num" value="{{ old('contact_num') }}" class="form-control" required minlength="11" maxlength="11">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-4 mb-3">
+                                    <small class="text-start d-block">Street <span class="text-danger">*</span></small>
+                                    <input type="text" name="street" value="{{ old('street') }}" class="form-control" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <small class="text-start d-block">City <span class="text-danger">*</span></small>
+                                    <input type="text" name="city" value="{{ old('city') }}" class="form-control" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <small class="text-start d-block">Region <span class="text-danger">*</span></small>
+                                    <input type="text" name="region" value="{{ old('region') }}" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-4 mb-3">
+                                    <small class="text-start d-block">Role <span class="text-danger">*</span></small>
+                                    <input type="text" name="role" value="{{ old('role') }}" class="form-control" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <small class="text-start d-block">Email <span class="text-danger">*</span></small>
+                                    <input type="email" name="email" value="{{ old('email') }}" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button id="save-book-btn" class="btn btn-addbook">Update Employee</button>
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </x-sidebar>
-
-
-<script>
-    // JavaScript to toggle between table and form
-    document.getElementById('employees-btn').addEventListener('click', function() {
-        // Change header to "Manage Books > Add Books"
-        document.getElementById('employees-header').innerHTML = '<strong>Employees > Employee Details</strong>';
-
-        // Hide the table card and show the form card
-        document.getElementById('book-card').style.display = 'none';
-        document.getElementById('add-employee-form-card').style.display = 'block';
-    });
-
-    document.getElementById('cancel-btn').addEventListener('click', function() {
-        // Reset header back to "Manage Books"
-        document.getElementById('employees-header').innerHTML = '<strong>Employees</strong>';
-
-        // Show the table card and hide the form card
-        document.getElementById('book-card').style.display = 'block';
-        document.getElementById('add-employee-form-card').style.display = 'none';
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        const rowsPerPage = 10;
-        const tableBody = document.getElementById("book-table-body");
-        const paginationContainer = document.getElementById("pagination");
-
-        const rows = Array.from(tableBody.querySelectorAll("tr"));
-        const pageCount = Math.ceil(rows.length / rowsPerPage);
-
-        let currentPage = 1;
-
-        function displayPage(page) {
-            const start = (page - 1) * rowsPerPage;
-            const end = start + rowsPerPage;
-
-            rows.forEach((row, index) => {
-                row.style.display = index >= start && index < end ? "" : "none";
-            });
-        }
-
-        function createButton(label, page = null, disabled = false) {
-            const btn = document.createElement("button");
-            btn.innerText = label;
-            btn.className = "btn btn-sm mx-1 btn-outline-primary";
-            if (disabled) btn.disabled = true;
-            if (page === currentPage) btn.classList.add("active");
-
-            if (page !== null) {
-                btn.addEventListener("click", () => {
-                    currentPage = page;
-                    displayPage(currentPage);
-                    setupPagination();
-                });
-            }
-
-            return btn;
-        }
-
-        function setupPagination() {
-            paginationContainer.innerHTML = "";
-
-            const maxVisiblePages = 5;
-            let startPage = Math.max(1, currentPage - 2);
-            let endPage = Math.min(pageCount, currentPage + 2);
-
-            if (endPage - startPage < maxVisiblePages - 1) {
-                if (startPage === 1) {
-                    endPage = Math.min(pageCount, startPage + maxVisiblePages - 1);
-                } else if (endPage === pageCount) {
-                    startPage = Math.max(1, pageCount - maxVisiblePages + 1);
-                }
-            }
-
-            // Prev
-            paginationContainer.appendChild(
-                createButton("« Prev", currentPage - 1, currentPage === 1)
-            );
-
-            // First page + dots
-            if (startPage > 1) {
-                paginationContainer.appendChild(createButton(1, 1));
-                if (startPage > 2) {
-                    const dots = document.createElement("span");
-                    dots.innerText = "...";
-                    dots.className = "mx-1";
-                    paginationContainer.appendChild(dots);
-                }
-            }
-
-            // Middle page numbers
-            for (let i = startPage; i <= endPage; i++) {
-                paginationContainer.appendChild(createButton(i, i));
-            }
-
-            // Dots + last page
-            if (endPage < pageCount) {
-                if (endPage < pageCount - 1) {
-                    const dots = document.createElement("span");
-                    dots.innerText = "...";
-                    dots.className = "mx-1";
-                    paginationContainer.appendChild(dots);
-                }
-                paginationContainer.appendChild(createButton(pageCount, pageCount));
-            }
-
-            // Next
-            paginationContainer.appendChild(
-                createButton("Next »", currentPage + 1, currentPage === pageCount)
-            );
-        }
-
-        displayPage(currentPage);
-        setupPagination();
-    });
-</script>
+@vite('resources/js/pagination.js') 
+@vite('resources/js/employees.js') 
+ 

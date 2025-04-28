@@ -39,7 +39,7 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="book-table-body"> 
                         @foreach($members as $member)
                                 <tr>
                                     <td>{{ $member->id }}</td>
@@ -80,7 +80,10 @@
 
                     </table>
                 </div>
+                <div class="d-flex justify-content-center mt-3" id="pagination">
+                </div>
             </div>
         </div>
     </div>
 </x-sidebar>
+@vite('resources/js/pagination.js')  

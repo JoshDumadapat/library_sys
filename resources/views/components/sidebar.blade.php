@@ -20,10 +20,10 @@
 
 </head>
 
-<body>
+<body> 
     <div class="d-flex vh-100">
         <!-- Sidebar Wrapper -->
-        <div class="sidebar-wrapper collapsed"> <!-- Initially collapsed -->
+        <div class="sidebar-wrapper collapsed">  
             <div class="card sidebar-card" style="margin-left: 12px; margin: right 50px;">
                 <div class="card-body p-0">
                     <!-- Logo at the top -->
@@ -118,26 +118,38 @@
         const tooltipElement = document.querySelector('.switch');
         const body = document.body;
 
+        // Check if dark mode was previously enabled in localStorage
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            body.classList.add('dark-mode');
+            icon.classList.remove('bi-sun-fill');
+            icon.classList.add('bi-moon-fill');
+            tooltipElement.setAttribute('title', 'Switch to Light Mode');
+            toggle.checked = true; // Ensure the toggle is checked
+        }
+
+        // Dark mode toggle event listener
         toggle.addEventListener('change', function() {
             if (this.checked) {
                 icon.classList.remove('bi-sun-fill');
                 icon.classList.add('bi-moon-fill');
                 tooltipElement.setAttribute('title', 'Switch to Light Mode');
                 body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'enabled'); // Save dark mode state
             } else {
                 icon.classList.remove('bi-moon-fill');
                 icon.classList.add('bi-sun-fill');
                 tooltipElement.setAttribute('title', 'Switch to Dark Mode');
                 body.classList.remove('dark-mode');
+                localStorage.removeItem('darkMode'); // Remove dark mode state
             }
 
             bootstrap.Tooltip.getInstance(tooltipElement).hide();
-
             bootstrap.Tooltip.getInstance(tooltipElement).setContent({
                 '.tooltip-inner': tooltipElement.getAttribute('title')
             });
         });
 
+        // Tooltip event listeners
         tooltipElement.addEventListener('mouseenter', function() {
             bootstrap.Tooltip.getInstance(tooltipElement).show();
         });
@@ -147,9 +159,5 @@
         });
     </script>
 
-
-
 </body>
-
-
 </html>
