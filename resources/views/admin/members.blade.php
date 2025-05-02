@@ -49,7 +49,7 @@
                                     <td>
                                         {{ $member->address->street ?? '' }},
                                         {{ $member->address->city ?? '' }},
-                                        {{ $member->address->province ?? '' }}
+                                        {{ $member->address->region ?? '' }}
                                     </td>
 
                                     <td>

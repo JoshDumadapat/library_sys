@@ -39,33 +39,28 @@
                             </tr>
                         </thead>
                         <tbody id="book-table-body">
-                            <!-- Sample Row 1 -->
-                            <tr>
-                                <td>1</td>
-                                <td>F. Scott Fitzgerald</td>
-                                <td>1-2-2025</td>
-                                <td>1-10-2025</td>
-                                <td>3</td>
-                                <td><span class="badge bg-warning text-black">Pending</span></td>
-                                <td>
-                                <button id="lending-detail" class="btn btn-view" style="border-radius: 5px;">
-                                    <i class="bi bi-eye me-1"></i>&nbsp;View Details
-                                </button>
-
-                                </td>
-                            </tr>
-                            <!-- Sample Row 2 -->
-                            <tr>
-                                <td>23</td>
-                                <td>F. Scott Fitzgerald</td>
-                                <td>1-2-2025</td>
-                                <td>1-10-2025</td>
-                                <td>3</td>
-                                <td><span class="badge bg-danger">Overdue</span></td>
-                                <td>
-                                    <button class="btn btn-view" style="border-radius: 5px;"><i class="bi bi-eye me-1"></i>&nbsp;View Details</button>
-                                </td>
-                            </tr>
+                                @foreach($lendings as $lending)
+                                <tr>
+                                    <td>{{ $lending->trans_ID }}</td>
+                                    <td>{{ optional($lending->user)->first_name }} {{ optional($lending->user)->last_name }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($lending->borrow_date)->format('F j, Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($lending->due_date)->format('F j, Y') }}</td>
+                                    <td>{{ $lending->transDetails->count() }}</td>  <!-- Assuming you want to show the number of books in this transaction -->
+                                    <td>
+                                        <!-- Status Logic (optional) -->
+                                        @if($lending->return_date)
+                                            <span class="badge bg-success">Returned</span>
+                                        @else
+                                            <span class="badge bg-warning">Pending</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                    <button class="lending-detail" data-id="{{ $lending->trans_ID }}">
+                                            <i class="bi bi-eye me-1"></i>&nbsp;View Details
+                                        </button>
+                                    </td>
+                                </tr>
+                                @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -73,6 +68,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- FORM AFTER VIEW DETAILS-->
 
         <div class="card mt-5 me-3 ms-3" style="height: 830px; overflow-y: auto; border-radius:12px; display: none;" id="add-book-form-card">
             <div class="card-body px-4 py-4">
@@ -83,37 +80,43 @@
                     <hr class="mb-4">
                 </div>
 
-                <!-- Lending ID and Total Books -->
+                <!-- Lending ID and Borrow Date -->
                 <div class="row mb-0 mt-3">
                     <div class="col-md-6 mb-0">
-                        <p style="font-size: 1.1rem;"><strong>Lending ID:</strong> LND-00123</p>
+                        <p style="font-size: 1.1rem;">
+                            <strong>Lending ID:</strong> <span id="lend-id"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-6 mb-0">
+                        <p style="font-size: 1.1rem;">
+                            <strong>Borrow Date:</strong> <span id="borrow-date"></span>
+                        </p>
                     </div>
 
                     <div class="col-md-6 mb-0">
-                        <p style="font-size: 1.1rem;"><strong>Borrow Date:</strong> 2025-04-01</p>
+                        <p style="font-size: 1.1rem;">
+                            <strong>Member Name:</strong> <span id="member-name"></span>
+                        </p>
                     </div>
+                    <div class="col-md-6 mb-0">
+                        <p style="font-size: 1.1rem;">
+                            <strong>Status:</strong> <span id="status"></span>
+                        </p>
+                    </div>
+
+                    <div class="col-md-6 mb-0">
+                        <p style="font-size: 1.1rem;">
+                            <strong>Total Books Borrowed:</strong> <span id="total-books"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-6 mb-0">
+                        <p style="font-size: 1.1rem;">
+                            <strong>Due Date:</strong> <span id="due-date"></span>
+                        </p>
+                    </div>
+
                 </div>
 
-                <!-- Member Name and Status -->
-                <div class="row mb-0">
-                    <div class="col-md-6 mb-0">
-                        <p style="font-size: 1.1rem;"><strong>Member Name:</strong> John Doe</p>
-                    </div>
-                    <div class="col-md-6 mb-0">
-                        <p style="font-size: 1.1rem;"><strong>Status:</strong> Pending</p>
-                    </div>
-                </div>
-
-                <!-- Borrow and Due Dates -->
-                <div class="row mb-0">
-
-                    <div class="col-md-6 mb-0">
-                        <p style="font-size: 1.1rem;"><strong>Total Books Borrowed:</strong> 3</p>
-                    </div>
-                    <div class="col-md-6 mb-0">
-                        <p style="font-size: 1.1rem;"><strong>Due Date:</strong> 2025-04-10</p>
-                    </div>
-                </div>
 
                 <!-- Book Information Header -->
                 <div class="row mt-4">
@@ -121,72 +124,68 @@
                     <hr class="mb-4">
                 </div>
 
-                <!-- Book Table -->
-                <div class="row mb-4" style="max-height: 280px; overflow-y: auto;">
-                    <div class="col-md-12">
-                        <table class=" custom-table  ">
-                            <thead>
-                                <tr>
-                                    <th>Book ID</th>
-                                    <th>Title</th>
-                                    <th>ISBN</th>
-                                    <th>Return Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>BK001</td>
-                                    <td>Introduction to Algorithms</td>
-                                    <td>9780262033848</td>
-                                    <td>Returned</td>
-                                </tr>
-                                <tr>
-                                    <td>BK002</td>
-                                    <td>Clean Code</td>
-                                    <td>9780132350884</td>
-                                    <td>Missing</td>
-                                </tr>
-                                <tr>
-                                    <td>BK003</td>
-                                    <td>Design Patterns</td>
-                                    <td>9780201633610</td>
-                                    <td>Damaged</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+ <!-- Lended Book Table Row -->
+<div class="row mb-4" style="max-height: 280px; overflow-y: auto;">
+    <div class="col-md-12">
+        <!-- Form should wrap the entire table -->
+        <form action="{{ route('update.book.status', ['trans_id' => $lending->trans_ID]) }}" method="POST">
+            @csrf
+            @method('POST')
 
-                <hr>
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Book ID</th>
+                        <th>Title</th>
+                        <th>ISBN</th>
+                        <th>Return Status</th>
+                        <th>Fine Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="book-table-body">
+            <!-- Rows will be inserted here by JavaScript -->
+                  </tbody>
+            </table>
 
-                <!-- Fine Details -->
-                <div class="row mb-0 mt-5">
-                    <div class="col-md-12 mb-0">
-                        <p style="font-size: 1.1rem;"><strong>Overdue Fine:</strong> ₱30.00</p>
-                    </div>
-                    <div class="col-md-12 mb-0">
-                        <p style="font-size: 1.1rem;"><strong>Missing Book Fine:</strong> ₱500.00</p>
-                    </div>
-                    <div class="col-md-12 mb-0">
-                        <p style="font-size: 1.1rem;"><strong>Damaged Book Fine:</strong> ₱100.00</p>
-                    </div>
-                    <div class="col-md-12 mb-0">
-                        <p style="font-size: 1.1rem;"><strong>Total Fine:</strong> ₱630.00</p>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="row mb-3">
-                    <div class="col-md-12 text-end">
-                        <button class="btn btn-add me-2" style="font-size: 1.1rem;">Return Book</button>
-                        <button id="cancel-btn" class="btn btn-view" style="font-size: 1.1rem;">Cancel</button>
-                    </div>
-                </div>
+            <!-- Submit button inside the form -->
+            <div class="mt-3">
+                <button type="submit" class="btn btn-success">Update Book Statuses</button>
+            </div>
+        </form>
             </div>
         </div>
 
+                <hr>
+
+          <!-- Fine Details row -->
+                <div class="row mb-0 mt-5">
+                    <div class="col-md-12 mb-0">
+                        <p style="font-size: 1.1rem;"><strong>Overdue Fine:</strong> <span class="overdue-fine">₱0.00</span></p>
+                    </div>
+                    <div class="col-md-12 mb-0">
+                        <p style="font-size: 1.1rem;"><strong>Missing Book Fine:</strong> <span class="missing-fine">₱0.00</span></p>
+                    </div>
+                    <div class="col-md-12 mb-0">
+                        <p style="font-size: 1.1rem;"><strong>Damaged Book Fine:</strong> <span class="damaged-fine">₱0.00</span></p>
+                    </div>
+                    <div class="col-md-12 mb-0">
+                        <p style="font-size: 1.1rem;"><strong>Total Fine:</strong> <span id="total-fine">₱0.00</span></p>
+                    </div>
+                </div>
 
 
+                        <!-- Action Buttons -->
+                        <div class="row mb-3">
+                            <div class="col-md-12 text-end">
+                                <button class="btn btn-add me-2" style="font-size: 1.1rem;">Return Book</button>
+                                <button id="cancel-btn" type="button" class="btn btn-view" style="font-size: 1.1rem;">Cancel</button>
+
+                            </div>
+                        </div>
+                </div>        
+            </div>
+        </div>
+        </form>
     </div>
 </x-sidebar>
 @vite('resources/js/pagination.js') 

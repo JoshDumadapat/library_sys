@@ -9,6 +9,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     @vite(['resources/css/app.css'])
     <link rel="icon" type="image/png" href="{{ asset('storage/images/favicon.png') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+
     <title>LunaBooks</title>
 </head>
 

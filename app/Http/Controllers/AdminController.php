@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Book;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -18,7 +19,8 @@ class AdminController extends Controller
 
     public function manageBooks()
     {
-        return view('admin.manageBooks');
+        return view('admin.manageBooks.index', compact('books'));
+
     }
 
     public function lend()
@@ -43,8 +45,13 @@ class AdminController extends Controller
 
     public function employees()
     {
-        return view('admin.employees');
+        // Fetch all users who do not have the 'member' role
+        $employees = User::where('role', '!=', 'member')->with('address')->get();
+    
+        return view('admin.employees.index', compact('employees'));
     }
+    
+    
 
     public function settings()
     {

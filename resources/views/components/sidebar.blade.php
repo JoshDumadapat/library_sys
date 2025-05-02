@@ -10,12 +10,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     @vite(['resources/css/sidebar.css'])
     <link rel="icon" type="image/png" href="{{ asset('storage/images/favicon.png') }}">
-    <!-- In the <head> -->
-    <link rel="stylesheet" href="{{ asset('css/books.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    <!-- Before closing </body> tag -->
-    <script src="{{ asset('js/books.js') }}"></script>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>LunaBooks | Dashboard</title>
 
 </head>

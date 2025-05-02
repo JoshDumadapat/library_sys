@@ -55,5 +55,16 @@ class User extends Authenticatable
     {
         return $this->hasOne(Address::class,'user_id');
     }
+
+    public function transactions()
+{
+    return $this->hasMany(Transaction::class, 'user_id');
+}
+
+public function handledTransactions()
+{
+    return $this->hasMany(Transaction::class, 'handled_by');
+}
+
 }
 

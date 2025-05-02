@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 
+
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -17,6 +18,33 @@ class MemberController extends Controller
         return view('member.dashboard');  // Return the member dashboard view
     }
 
-    
+    // MemberController
+public function showMember($id)
+{
+    $member = User::find($id);
+    return response()->json($member);
+}
+
+public function searchMembers(Request $request)
+{
+    $members = User::select('id', 'first_name', 'last_name')
+        ->where('role', 'member')
+        ->where(function ($query) use ($request) {
+            $query->where('first_name', 'like', '%' . $request->q . '%')
+                  ->orWhere('last_name', 'like', '%' . $request->q . '%');
+        })
+        ->get()
+        ->map(function ($member) {
+            return [
+                'id' => $member->id,
+                'name' => $member->first_name . ' ' . $member->last_name
+            ];
+        });
+
+    return response()->json($members);
+}
+
+
+
 }
 
