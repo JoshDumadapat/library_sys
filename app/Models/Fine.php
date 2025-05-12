@@ -14,7 +14,7 @@ class Fine extends Model
     protected $primaryKey = 'fine_id';
 
     protected $fillable = [
-        'tdetail_ID', 
+        'tdetail_ID',
         'fine_amt',
         'reason',
         'fine_status',
@@ -51,5 +51,10 @@ class Fine extends Model
     public function fineType()
     {
         return $this->belongsTo(FineType::class, 'ftype_id');
+    }
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
     }
 }

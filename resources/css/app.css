@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Glacial+Indifference&family=Open+Sans:ital,wght@0,400;1,400&display=swap");
+
 /* Navbar Styling */
 .navbar {
     background-color: #f8f9fa; /* Light background */
@@ -179,7 +181,6 @@
 
 /* Load fonts from Google Fonts (example) */
 /* Place these in your HTML <head> if not already loaded */
-@import url("https://fonts.googleapis.com/css2?family=Glacial+Indifference&family=Open+Sans:ital,wght@0,400;1,400&display=swap");
 
 /* Main Text Styling */
 .main-text {
@@ -324,4 +325,8 @@
     font-weight: bold;
     text-transform: uppercase; /* Capitalize all letters */
     letter-spacing: 2px; /* Optional: adjust for spacing between characters */
+}
+
+#book-table-body tr {
+    display: table-row !important;
 }

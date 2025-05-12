@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\User;  // Assuming your employees are users with a specific role
@@ -15,7 +16,7 @@ class EmployeeController extends Controller
         $employees = User::where('role', '!=', 'member')->get();  // Correct: Fetching a collection of employees
 
         // Pass employees data to the view
-        return view('admin.employees', compact('employees'));  // Change 'employee' to 'employees' to reflect a collection
+        return view('admin.employees.index', compact('employees'));  // Change 'employee' to 'employees' to reflect a collection
     }
 
     // Show the edit employee form
@@ -69,43 +70,39 @@ class EmployeeController extends Controller
         return redirect()->route('admin.employees')->with('success', 'Employee updated successfully');
     }
 
-   
-public function store(Request $request)
-{
-    $request->validate([
-        'first_name' => 'required|string|max:255',
-        'last_name' => 'required|string|max:255',
-        'contact_num' => 'required|string|max:15',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|confirmed|min:8',
-        'street' => 'required|string|max:255',
-        'city' => 'required|string|max:255',
-        'region' => 'required|string|max:255',
-        'role' => 'required|in:admin,librarian',
-    ]);
 
-    // Create User
-    $user = User::create([
-        'first_name' => $request->first_name,
-        'last_name' => $request->last_name,
-        'contact_num' => $request->contact_num,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'role' => $request->role,
-    ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'contact_num' => 'required|string|max:15',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|confirmed|min:8',
+            'street' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'region' => 'required|string|max:255',
+            'role' => 'required|in:admin,librarian',
+        ]);
 
-    // Create Address
-    Address::create([
-        'user_id' => $user->id,
-        'street' => $request->street,
-        'city' => $request->city,
-        'region' => $request->region,
-    ]);
+        // Create User
+        $user = User::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'contact_num' => $request->contact_num,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+        ]);
 
-    return redirect()->route('employee.index')->with('success', 'Employee added successfully.');
+        // Create Address
+        Address::create([
+            'user_id' => $user->id,
+            'street' => $request->street,
+            'city' => $request->city,
+            'region' => $request->region,
+        ]);
+
+        return redirect()->route('employee.index')->with('success', 'Employee added successfully.');
+    }
 }
-
-}
-
-
-

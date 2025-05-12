@@ -1,91 +1,139 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Book;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\TransDetail;
+use Illuminate\Support\Facades\DB;
+
 
 
 
 class TransactionController extends Controller
 {
-    public function lendFromReservation($resId)
+
+
+
+    public function showLendUI()
     {
-        $reservation = Reservation::with('resDetails')->findOrFail($resId);
-    
-        $transaction = Transaction::create([
-            'user_ID' => $reservation->user_ID,
-            'borrow_date' => now(),
-            'due_date' => now()->addDays(7),
-            'handled_by' => auth()->id()
-        ]);
-    
-        foreach ($reservation->resDetails as $item) {
-            TransDetail::create([
-                'trans_ID' => $transaction->trans_ID,
-                'book_id' => $item->book_id,
-                'td_status' => 'borrowed'
-            ]);
-    
-            $item->update(['res_status' => 'approved']);
+        $books = Book::with('transDetails.transaction.admin')->get();
+
+        return view('admin.lend', compact('books'));
+    }
+
+    public function getNextTransactionId()
+    {
+        $nextId = Transaction::max('trans_ID') + 1;
+        return response()->json(['next_id' => $nextId]);
+    }
+
+
+
+    public function checkMemberFines($memberId)
+    {
+        $unpaidFines = \App\Models\Fine::whereHas('transactionDetail.transaction', function ($query) use ($memberId) {
+            $query->where('user_ID', $memberId);
+        })
+            ->where('fine_status', 'pending')
+            ->exists();
+
+        return $unpaidFines;
+    }
+
+    public function lendBooks(Request $request)
+    {
+        // First check for unpaid fines
+        if ($this->checkMemberFines($request->user_ID)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Member has unpaid fines. Please settle fines before borrowing.'
+            ], 403);
         }
-    
-        $reservation->update(['res_status' => 'approved']);
-    
-        return redirect()->back()->with('success', 'Book lent successfully.');
+
+        $validated = $request->validate([
+            'user_ID' => 'required|exists:users,id',
+            'book_IDs' => 'required|array',
+            'book_IDs.*' => 'exists:books,book_ID',
+            'borrow_date' => 'required|date',
+            'due_date' => 'required|date|after:borrow_date'
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            // First verify all books are available
+            foreach ($request->book_IDs as $bookId) {
+                $currentlyBorrowed = TransDetail::where('book_ID', $bookId)
+                    ->whereHas('transaction', function ($query) {
+                        $query->whereNull('return_date'); // Assuming you track returns
+                    })
+                    ->count();
+
+                $totalCopies = Book::find($bookId)->total_copies;
+
+                if ($currentlyBorrowed >= $totalCopies) {
+                    throw new \Exception("Book ID $bookId is not available for borrowing");
+                }
+            }
+
+            // Create transaction
+            $transaction = new Transaction();
+            $transaction->user_ID = $request->user_ID;
+            $transaction->borrow_date = $request->borrow_date;
+            $transaction->due_date = $request->due_date;
+            $transaction->save();
+
+            // Create transaction details
+            foreach ($request->book_IDs as $bookId) {
+                $transDetail = new TransDetail();
+                $transDetail->trans_ID = $transaction->trans_ID;
+                $transDetail->book_ID = $bookId;
+                $transDetail->save();
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Books successfully lent'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Error processing transaction: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
-    
-public function showLendUI()
-{
-    $books = Book::with('transDetails.transaction.admin')->get();
+    public function checkFines($memberId)
+    {
+        $hasFines = $this->checkMemberFines($memberId);
 
-    return view('admin.lend', compact('books'));
-}
-
-public function getNextTransactionId()
-{
-    $nextId = Transaction::max('trans_ID') + 1;
-    return response()->json(['next_id' => $nextId]);
-}
-
-public function lendBooks(Request $request)
-{
-    $validated = $request->validate([
-        'user_ID' => 'required|exists:users,id',
-        'book_IDs' => 'required|array',
-        'book_IDs.*' => 'exists:books,book_id'
-    ]);
-
-    // Continue with the rest of the logic
-    $transaction = new Transaction();
-    $transaction->user_ID = $request->user_ID;
-    $transaction->borrow_date = $request->borrow_date;
-    $transaction->due_date = $request->due_date;
-    $transaction->save();
-
-    try {
-        $transaction->save();
-    } catch (\Exception $e) {
-        return response()->json(['message' => 'Failed to save transaction', 'error' => $e->getMessage()]);
+        return response()->json([
+            'has_fines' => $hasFines,
+            'message' => $hasFines ? 'Member has unpaid fines' : 'No unpaid fines'
+        ]);
     }
-    
-    if (!$transaction->trans_ID) {
-        return response()->json(['message' => 'Failed to save transaction']);
+
+    public function checkBookAvailability($bookId)
+    {
+        $currentlyBorrowed = TransDetail::where('book_ID', $bookId)
+            ->whereHas('transaction', function ($query) {
+                $query->whereNull('return_date');
+            })
+            ->count();
+
+        $book = Book::findOrFail($bookId);
+        $isAvailable = ($currentlyBorrowed < $book->total_copies);
+
+        return response()->json([
+            'is_available' => $isAvailable,
+            'message' => $isAvailable
+                ? 'Book is available'
+                : "The book '{$book->title}' is currently unavailable"
+        ]);
     }
-    
-
-    foreach ($request->book_IDs as $bookId) {
-    $transDetail = new TransDetail();
-    $transDetail->trans_ID = $transaction->trans_ID; // Ensure this is set properly
-    $transDetail->book_ID = $bookId;
-    $transDetail->save();
-}
-
-    return response()->json(['message' => 'Books successfully lent']);
-}
-
-
-    
 }

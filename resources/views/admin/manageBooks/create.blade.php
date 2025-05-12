@@ -1,4 +1,3 @@
-
 <div class="card mt-5 me-3 ms-3" style="height: 830px; overflow-y: auto; border-radius:12px;" id="add-book-form-card">
     <div class="card-body px-4 py-4">
         <h4 class="section-title mb-3" style="font-size: 1.5rem;">Book Information</h4>
@@ -43,7 +42,7 @@
                     <select id="floor_id" name="floor_id" class="form-control" style="font-size: 1.05rem;" required>
                         <option value="">-- Select Floor --</option>
                         @foreach ($floors as $floor)
-                            <option value="{{ $floor->floor_id }}">{{ $floor->floor_num }}</option>
+                        <option value="{{ $floor->floor_id }}">{{ $floor->floor_num }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -52,12 +51,12 @@
                 <div class="col-md-6 mb-3">
                     <label for="shelf_id" style="font-size: 1.1rem;">Shelf <span style="color: red;">*</span></label>
                     <select id="shelf_id" name="shelf_id" class="form-control" style="font-size: 1.05rem;" required>
-    <option value="">-- Select Shelf --</option>
-    @foreach ($shelves as $shelf)
-        <option value="{{ $shelf->shelf_id }}">{{ $shelf->shelf_code }}</option>
-    @endforeach
-</select>
- 
+                        <option value="">-- Select Shelf --</option>
+                        @foreach ($shelves as $shelf)
+                        <option value="{{ $shelf->shelf_id }}">{{ $shelf->shelf_code }}</option>
+                        @endforeach
+                    </select>
+
                 </div>
 
                 {{-- Author(s) --}}
@@ -65,7 +64,7 @@
                     <label for="author_ids" style="font-size: 1.1rem;">Author(s) <span style="color: red;">*</span></label>
                     <select id="author_ids" name="author_ids[]" class="form-control" multiple required style="font-size: 1.05rem;">
                         @foreach ($authors as $author)
-                            <option value="{{ $author->author_id }}">{{ $author->au_fname }} {{ $author->au_lname }}</option>
+                        <option value="{{ $author->author_id }}">{{ $author->au_fname }} {{ $author->au_lname }}</option>
                         @endforeach
                     </select>
                     <small class="form-text text-muted">Hold Ctrl (or Cmd) to select multiple authors.</small>
@@ -87,10 +86,12 @@
 
             {{-- Submit Button --}}
             <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary" style="font-size: 1.2rem;">Add Book</button>
+                <button type="submit" class="btn btn-add" style="font-size: 1.2rem;">Add Book</button>
+                <button class="btn btn-view me-2" id="cancel-btn" style="font-size: 1.1rem;">Cancel</button>
             </div>
         </form>
     </div>
 </div>
 
-@vite('resources/js/manageBooks.js') 
+
+@vite('resources/js/manageBooks.js')

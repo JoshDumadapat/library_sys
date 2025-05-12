@@ -1,0 +1,125 @@
+        /* Added styles to align cards with welcome card content */
+        .main-content-container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        .welcome-card-container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+            border-radius: 5px;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .btn-dashboard {
+            background-color: #246484;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .btn-dashboard:hover {
+            background-color: #1a4d6b;
+            color: white;
+        }
+        
+        /* Improved Pagination Styles */
+        #pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 20px;
+        }
+
+        #pagination .btn {
+            color: #246484;
+            background-color: white;
+            border: 1px solid #246484;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            opacity: 1;
+            /* Make sure all buttons are visible */
+        }
+
+        #pagination .btn:hover:not(.active) {
+            background-color: #e7f1ff;
+            border-color: #0d6efd;
+        }
+
+        #pagination .btn.active {
+            background-color: #246484;
+            color: white;
+            border-color: #0d6efd;
+        }
+
+        #pagination .btn:disabled {
+            background-color: #f8f9fa;
+            color: #adb5bd;
+            border-color: #dee2e6;
+            opacity: 1;
+            cursor: not-allowed;
+        }
+
+        .page-number {
+            padding: 5px 10px;
+            margin: 0 2px;
+            cursor: pointer;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+        }
+
+        .page-number:hover {
+            background-color: #e7f1ff;
+        }
+
+        .page-number.active {
+            background-color: #246484;
+            color: white;
+        }
+
+        /* Add this CSS for the hover effect on stat cards */
+        .card.text-center {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent; /* Initial transparent border */
+        }
+
+        .card.text-center:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+            border: 2px solid white !important; /* White border on hover */
+        }
+
+        /* Optional: Add a smooth transition for the card body content */
+        .card-body {
+            transition: all 0.3s ease;
+        }

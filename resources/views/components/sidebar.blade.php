@@ -2,25 +2,27 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    @vite(['resources/css/sidebar.css'])
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ asset('storage/images/favicon.png') }}">
+    <title>LunaBooks | Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>LunaBooks | Dashboard</title>
-
+    @vite(['resources/css/sidebar.css'])
 </head>
 
-<body> 
+<body>
     <div class="d-flex vh-100">
         <!-- Sidebar Wrapper -->
-        <div class="sidebar-wrapper collapsed">  
+        <div class="sidebar-wrapper collapsed">
             <div class="card sidebar-card" style="margin-left: 12px; margin: right 50px;">
                 <div class="card-body p-0">
                     <!-- Logo at the top -->
@@ -37,6 +39,7 @@
                             <li><a href="{{ route('admin.manageBooks') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/manage.png') }}" alt="Manage Books" class="sidebar-icon"> <span>Manage&nbsp;Books</span></a></li>
                             <li><a href="{{ route('admin.lend') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/lend.png') }}" alt="Lend" class="sidebar-icon"> <span>Lend</span></a></li>
                             <li><a href="{{ route('admin.return') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/return.png') }}" alt="Return" class="sidebar-icon"> <span>Return</span></a></li>
+                            <li><a href="{{ route('admin.fines') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/fine.png') }}" alt="Fine" class="sidebar-icon"> <span>Fines</span></a></li>
                             <li><a href="{{ route('admin.members') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/members.png') }}" style="width: 22px;" alt="Members" class="sidebar-icon"> <span>Members</span></a></li>
                             <li><a href="{{ route('admin.report') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/report.png') }}" style="width: 25px;" alt="Report" class="sidebar-icon"> <span>Report</span></a></li>
                             <li><a href="{{ route('admin.employees') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/members.png') }}" style="width: 22px;" alt="Members" class="sidebar-icon"> <span>Employees</span></a></li>
@@ -64,8 +67,8 @@
             <!-- Top Row -->
             <div class="row mt-3 ">
                 <div class="col">
-                    <h4 class="fw-bold p-0 m-0">Josh Reyes</h4>
-                    <p class="p-0 m-0">Admin</p>
+                    <h4 class="fw-bold p-0 m-0">{{ Auth::user()->first_name.' '.Auth::user()->last_name ?? 'Guest' }}</h4>
+                    <p class="p-0 m-0">{{ ucfirst(Auth::user()->role ?? 'N/A') }}</p>
                 </div>
                 <div class="col d-flex justify-content-end align-items-center" style="margin-right: 15px;">
                     <label class="switch shadow-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Switch to Dark Mode">
@@ -75,12 +78,18 @@
                         </span>
                     </label>
 
-                    <div class="dropdown">
-                        <img src="{{ asset('storage/images/hero.jpg') }}" alt="Profile" class="profile-img dropbtn">
+                    <div class="dropdown position-relative">
+                        <img src="{{ asset('storage/images/hero.jpg') }}" alt="Profile"
+                            class="profile-img dropbtn">
                         <div class="dropdown-content">
-                            <a href="#">Link 1</a>
-                            <a href="#">Link 2</a>
-                            <a href="#">Link 3</a>
+                            <a href="#"><i class="bi bi-person me-2"></i>Profile</a>
+                            <a href="#"><i class="bi bi-gear me-2"></i>Settings</a>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item" style="color: rgb(54, 54, 54); border: none; background: none; width: 100%; text-align: left; padding: 12px 16px;">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -104,6 +113,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         const tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
@@ -157,4 +167,5 @@
     </script>
 
 </body>
+
 </html>

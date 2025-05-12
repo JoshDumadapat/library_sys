@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash; // Add this line
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Address;
 
@@ -47,7 +47,7 @@ class AuthController extends Controller
             'region' => $request->region,
         ]);
 
-        // Auto-login after registration
+
         Auth::login($user);
 
         return redirect()->route('member.dashboard')->with('success', 'Registration successful!');
@@ -70,7 +70,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            // Check the user's role
+
             $user = Auth::user();
             if ($user->role == 'admin') {
                 return redirect()->route('admin.dashboard')->with('success', 'Welcome Admin!');
@@ -81,7 +81,7 @@ class AuthController extends Controller
 
         return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
     }
-    // Handle logout
+
     public function logout(Request $request)
     {
         Auth::logout();

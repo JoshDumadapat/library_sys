@@ -4,7 +4,7 @@
 
     <div class="content">
         <!-- Header outside the card -->
-       
+
         <h5 id="manage-books-header" class="ms-3 mt-2"><strong>Manage Books</strong></h5>
 
         <!-- Card with Table and Inline CSS for Height -->
@@ -47,47 +47,47 @@
                             </tr>
                         </thead>
                         <tbody id="book-table-body">
-                    @foreach($books as $book)
-                    <tr>
-                        <td><input type="checkbox" value="{{ $book->id }}"></td>
-                        <td>{{ $book->book_id }}</td>
-                        <td>{{ $book->title }}</td>
-                        
-                        <!-- Display author names -->
-                        <td>
-                    @foreach($book->authors as $index => $author)
-                        {{ $author->au_fname }} {{ $author->au_lname }}@if(!$loop->last), @endif
-                    @endforeach
-                </td>
+                            @foreach($books as $book)
+                            <tr>
+                                <td><input type="checkbox" value="{{ $book->id }}"></td>
+                                <td>{{ $book->book_id }}</td>
+                                <td>{{ $book->title }}</td>
 
-        
-        <!-- Display genre names -->
-        <td>
-            @foreach($book->genres as $genre)
-                {{ $genre->genre }} <!-- Assuming 'name' is the field in Genre model -->
-            @endforeach
-        </td>
+                                <!-- Display author names -->
+                                <td>
+                                    @foreach($book->authors as $index => $author)
+                                    {{ $author->au_fname }} {{ $author->au_lname }}@if(!$loop->last), @endif
+                                    @endforeach
+                                </td>
 
-        <td>{{ $book->isbn }}</td>
-        <td>{{ $book->total_copies }}</td>
 
-        <!-- Display floor code -->
-        <td>{{ $book->floor->floor_num }}</td> <!-- Assuming 'floor_code' is the field in Floor model -->
+                                <!-- Display genre names -->
+                                <td>
+                                    @foreach($book->genres as $genre)
+                                    {{ $genre->genre }} <!-- Assuming 'name' is the field in Genre model -->
+                                    @endforeach
+                                </td>
 
-        <!-- Display shelf code -->
-        <td>{{ $book->shelf->shelf_code }}</td> <!-- Assuming 'shelf_code' is the field in Shelf model -->
+                                <td>{{ $book->isbn }}</td>
+                                <td>{{ $book->total_copies }}</td>
 
-        <td>
-        <button class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#bookModal" data-book_id="{{ $book->book_id }}">
-                <i class="bi bi-pencil-square me-1"></i>&nbsp;Edit
-            </button>
-            <button class="btn btn-delete" data-book_id="{{ $book->book_id }}">
-                <i class="bi bi-trash me-1"></i>&nbsp;Delete
-            </button>
-        </td>
-    </tr>
-    @endforeach
-</tbody>
+                                <!-- Display floor code -->
+                                <td>{{ $book->floor->floor_num }}</td> <!-- Assuming 'floor_code' is the field in Floor model -->
+
+                                <!-- Display shelf code -->
+                                <td>{{ $book->shelf->shelf_code }}</td> <!-- Assuming 'shelf_code' is the field in Shelf model -->
+
+                                <td>
+                                    <button class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#bookModal" data-book_id="{{ $book->book_id }}">
+                                        <i class="bi bi-pencil-square me-1"></i>&nbsp;Edit
+                                    </button>
+                                    <button class="btn btn-delete" data-book_id="{{ $book->book_id }}">
+                                        <i class="bi bi-trash me-1"></i>&nbsp;Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
 
                     </table>
                 </div>
@@ -98,52 +98,51 @@
             </div>
         </div>
 
-   
-         
-       <!-- Add Book Form Card -->
-     
-<div class="card mt-5 me-3 ms-3" style="height: 830px; overflow-y: auto; border-radius:12px; display: none;" id="add-book-form-card">
-    <div class="card-body px-4 py-4">
-    </div>
-</div>
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('.btn-delete').click(function () {
-            const book_id = $(this).data('book_id'); // ✅ extract data attribute
+        <!-- Add Book Form Card -->
 
-            if (confirm('Are you sure you want to delete this book?')) {
-                $.ajax({
-                url: `/admin/managebooks/${book_id}`,
-                type: 'DELETE',
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content')
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (response) {
-                    alert(response.message);
-                    location.reload(); // refresh the list
-                },
-                error: function (xhr) {
-                    alert('Error deleting book.');
-                    console.error(xhr.responseText);
-                }
-});
+        <div class="card mt-5 me-3 ms-3" style="height: 830px; overflow-y: auto; border-radius:12px; display: none;" id="add-book-form-card">
+            <div class="card-body px-4 py-4">
+            </div>
+        </div>
 
-            }
-        });
-    });
-</script>
 
-    
-     
- 
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('.btn-delete').click(function() {
+                    const book_id = $(this).data('book_id'); // ✅ extract data attribute
+
+                    if (confirm('Are you sure you want to delete this book?')) {
+                        $.ajax({
+                            url: `/admin/managebooks/${book_id}`,
+                            type: 'DELETE',
+                            data: {
+                                _token: $('meta[name="csrf-token"]').attr('content')
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                alert(response.message);
+                                location.reload(); // refresh the list
+                            },
+                            error: function(xhr) {
+                                alert('Error deleting book.');
+                                console.error(xhr.responseText);
+                            }
+                        });
+
+                    }
+                });
+            });
+        </script>
+
+
+
+
 </x-sidebar>
 
 @vite('resources/js/pagination.js')
-@vite('resources/js/manageBooks.js') 
-
+@vite('resources/js/manageBooks.js')
