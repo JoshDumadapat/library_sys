@@ -124,6 +124,3 @@ Route::get('/borrowed-books', function () {
 Route::get('/overdue-books', function () {
     return view('member.borrowedbook'); // This points to resources/views/member/bookrequested.blade.php
 });
-
-
-Route::post('/fines/custom-pay', [PaymentController::class, 'updateFineStatus']);

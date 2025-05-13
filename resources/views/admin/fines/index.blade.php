@@ -13,7 +13,16 @@
                     <div class="input-group w-50">
                         <h5 class="fw-bold">Fines Report</h5>
                     </div>
+                    <div class="input-group w-25">
+                        <label for="statusFilter" class="input-group-text">Filter:</label>
+                        <select id="statusFilter" class="form-select me-2" style="width: 200px;">
+                            <option value="all">All Statuses</option>
+                            <option value="paid">Paid</option>
+                            <option value="unpaid">Unpaid</option>
+                            <option value="pending">Pending</option>
+                        </select>
 
+                    </div>
                     <div>
                         <button id="generate-report-btn" class="btn btn-add" style="background-color: #246484; font-size:1.1rem;">
                             <i class="bi bi-file-earmark-text"></i> Generate Report
@@ -22,6 +31,8 @@
                 </div>
 
                 <hr class="mb-3 mt-0">
+
+
 
                 <!-- Table -->
                 <div id="fines-table">
@@ -40,7 +51,6 @@
                         <tbody>
                             @foreach($transactions as $transaction)
                             @php
-                            // Calculate values manually
                             $finesCount = 0;
                             $totalAmount = 0;
                             $hasUnpaid = false;
@@ -61,18 +71,16 @@
                             $status = $hasUnpaid ? 'unpaid' : ($hasPaid ? 'paid' : 'pending');
                             $formattedDate = $transaction->created_at->format('F d, Y');
                             @endphp
-                            <tr>
+                            <tr data-status="{{ $status }}">
                                 <td>{{ $transaction->trans_ID }}</td>
-                                <td>
-                                    {{ $transaction->user->first_name }} {{ $transaction->user->last_name }}
-                                </td>
+                                <td>{{ $transaction->user->first_name }} {{ $transaction->user->last_name }}</td>
                                 <td>{{ $finesCount }}</td>
                                 <td>₱{{ number_format($totalAmount, 2) }}</td>
                                 <td>
                                     <span class="badge 
-                    @if($status == 'paid') bg-success
-                    @elseif($status == 'unpaid') bg-danger
-                    @else bg-warning @endif">
+                        @if($status == 'paid') bg-success
+                        @elseif($status == 'unpaid') bg-danger
+                        @else bg-warning @endif">
                                         {{ ucfirst($status) }}
                                     </span>
                                 </td>

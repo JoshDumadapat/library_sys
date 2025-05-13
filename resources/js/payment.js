@@ -197,18 +197,12 @@ $(document).ready(function () {
                 '<span class="spinner-border spinner-border-sm"></span> Processing...'
             );
 
-        // Prepare payment data that matches server validation
-        console.log("Raw paymentFineIds value:", $("#paymentFineIds").val());
-        console.log(
-            "Parsed paymentFineIds:",
-            JSON.parse($("#paymentFineIds").val())
-        );
-
+        // Prepare payment data
         const paymentData = {
             trans_id: $("#paymentTransactionId").val(),
             payment_method: paymentMethod,
             items: JSON.parse($("#paymentFineIds").val()).map((item) => ({
-                tdetail_id: item.tdetail_id || item.tdetail_ID, // Try both possible property names
+                tdetail_id: item.tdetail_id || item.tdetail_ID,
                 fine_amount: item.fine_amount,
             })),
             amount: amountDue,
@@ -221,15 +215,15 @@ $(document).ready(function () {
             _token: $('meta[name="csrf-token"]').attr("content"),
         };
 
-        console.log("Submitting payment:", paymentData); // Debugging
-
         $.ajax({
             url: "/fines/pay-now",
             method: "POST",
             data: paymentData,
             success: function (response) {
-                console.log("Payment response:", response);
                 if (response.success) {
+                    // Immediately update UI status before showing receipt
+                    updateFineStatuses(response.payment_id, paymentData.items);
+
                     paymentModal.hide();
                     generateReceipt({
                         transactionId: paymentData.trans_id,
@@ -240,6 +234,7 @@ $(document).ready(function () {
                         amountTendered: amountTendered,
                         change: amountTendered - amountDue,
                         paymentDate: new Date().toLocaleString(),
+                        paymentId: response.payment_id,
                     });
                     receiptModal.show();
                 } else {
@@ -251,21 +246,34 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                console.error("Payment error:", xhr.responseText);
                 let errorMsg = "Payment failed";
+                if (xhr.responseJSON) {
+                    if (xhr.responseJSON.errors) {
+                        errorMsg = Object.values(xhr.responseJSON.errors)
+                            .flat()
+                            .join("<br>");
+                    } else if (xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    }
 
-                if (xhr.responseJSON && xhr.responseJSON.errors) {
-                    errorMsg = Object.values(xhr.responseJSON.errors)
-                        .flat()
-                        .join("<br>");
-                } else if (xhr.responseJSON?.message) {
-                    errorMsg = xhr.responseJSON.message;
+                    // Handle already paid fines specifically
+                    if (xhr.responseJSON.paid_fines) {
+                        errorMsg += `<br><br>Already paid fines: ${xhr.responseJSON.paid_fines.join(
+                            ", "
+                        )}`;
+                    }
                 }
 
                 Swal.fire({
                     title: "Error",
                     html: errorMsg,
                     icon: "error",
+                    willClose: () => {
+                        // Refresh data if there were payment conflicts
+                        if (xhr.responseJSON?.paid_fines) {
+                            loadFinesList();
+                        }
+                    },
                 });
             },
             complete: function () {
@@ -274,112 +282,148 @@ $(document).ready(function () {
         });
     });
 
-    // Generate receipt function
+    // Function to update UI status immediately
+    function updateFineStatuses(paymentId, items) {
+        items.forEach((item) => {
+            const $fineRow = $(`[data-tdetail-id="${item.tdetail_id}"]`);
+            if ($fineRow.length) {
+                // Update status badge
+                $fineRow
+                    .find(".badge")
+                    .removeClass("bg-danger")
+                    .addClass("bg-success")
+                    .text("paid");
+
+                // Disable pay button if exists
+                $fineRow.find(".pay-btn").prop("disabled", true);
+
+                // Add payment ID to data attribute
+                $fineRow.attr("data-payment-id", paymentId);
+            }
+        });
+    }
+
+    // Enhanced receipt generation with payment ID
     function generateReceipt(data) {
         let itemsHtml = "";
         data.fineItems.forEach((item) => {
             itemsHtml += `
-                <tr>
-                    <td>${item.book_title}</td>
-                    <td>${item.reason}</td>
-                    <td class="text-end">₱${item.amount.toFixed(2)}</td>
-                </tr>
-            `;
+            <tr>
+                <td>${item.book_title}</td>
+                <td>${item.reason}</td>
+                <td class="text-end">₱${item.amount.toFixed(2)}</td>
+            </tr>
+        `;
         });
 
         const receiptHtml = `
-            <div class="receipt-container">
-                <h4 class="text-center mb-3">Library Fine Payment Receipt</h4>
-                <div class="receipt-header mb-3">
-                    <p><strong>Transaction ID:</strong> TRANS-${
-                        data.transactionId
-                    }</p>
-                    <p><strong>Member:</strong> ${data.memberName}</p>
-                    <p><strong>Payment Date:</strong> ${data.paymentDate}</p>
-                    <p><strong>Payment Method:</strong> ${
-                        data.paymentMethod.charAt(0).toUpperCase() +
-                        data.paymentMethod.slice(1)
-                    }</p>
-                </div>
-                
-                <table class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th>Book</th>
-                            <th>Reason</th>
-                            <th class="text-end">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${itemsHtml}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th colspan="2">Total:</th>
-                            <th class="text-end">₱${data.totalAmount.toFixed(
-                                2
-                            )}</th>
-                        </tr>
-                        <tr>
-                            <th colspan="2">Amount Tendered:</th>
-                            <th class="text-end">₱${data.amountTendered.toFixed(
-                                2
-                            )}</th>
-                        </tr>
-                        <tr>
-                            <th colspan="2">Change:</th>
-                            <th class="text-end">₱${data.change.toFixed(2)}</th>
-                        </tr>
-                    </tfoot>
-                </table>
-                
-                <div class="text-center mt-4">
-                    <p>Thank you for your payment!</p>
-                    <button id="printReceiptBtn" class="btn btn-sm btn-primary me-2">Print Receipt</button>
-                    <button id="closeReceiptBtn" class="btn btn-sm btn-secondary">Close</button>
-                </div>
+        <div class="receipt-container">
+            <h4 class="text-center mb-3">Library Fine Payment Receipt</h4>
+            <div class="receipt-header mb-3">
+                <p><strong>Receipt #:</strong> ${data.paymentId}</p>
+                <p><strong>Transaction ID:</strong> TRANS-${
+                    data.transactionId
+                }</p>
+                <p><strong>Member:</strong> ${data.memberName}</p>
+                <p><strong>Payment Date:</strong> ${data.paymentDate}</p>
+                <p><strong>Payment Method:</strong> ${
+                    data.paymentMethod.charAt(0).toUpperCase() +
+                    data.paymentMethod.slice(1)
+                }</p>
             </div>
-        `;
+            
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Reason</th>
+                        <th class="text-end">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${itemsHtml}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2">Total:</th>
+                        <th class="text-end">₱${data.totalAmount.toFixed(
+                            2
+                        )}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Amount Tendered:</th>
+                        <th class="text-end">₱${data.amountTendered.toFixed(
+                            2
+                        )}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Change:</th>
+                        <th class="text-end">₱${data.change.toFixed(2)}</th>
+                    </tr>
+                </tfoot>
+            </table>
+            
+            <div class="text-center mt-4">
+                <p>Thank you for your payment!</p>
+                <button id="printReceiptBtn" class="btn btn-sm btn-primary me-2">Print Receipt</button>
+                <button id="closeReceiptBtn" class="btn btn-sm btn-secondary">Done</button>
+            </div>
+        </div>
+    `;
 
         $("#receiptContent").html(receiptHtml);
 
-        // Add print functionality
+        // Print functionality
         $("#printReceiptBtn").on("click", function () {
             const printWindow = window.open("", "", "width=600,height=600");
             printWindow.document.write(`
-                <html>
-                    <head>
-                        <title>Payment Receipt</title>
-                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-                        <style>
-                            body { padding: 20px; }
-                            .receipt-container { max-width: 500px; margin: 0 auto; }
-                            @media print {
-                                button { display: none !important; }
-                                body { font-size: 12px; }
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        ${receiptHtml}
-                        <script>
-                            window.onload = function() {
-                                setTimeout(function() {
-                                    window.print();
-                                    window.close();
-                                }, 200);
-                            };
-                        <\/script>
-                    </body>
-                </html>
-            `);
+            <html>
+                <head>
+                    <title>Payment Receipt #${data.paymentId}</title>
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+                    <style>
+                        body { padding: 20px; }
+                        .receipt-container { max-width: 500px; margin: 0 auto; }
+                        @media print {
+                            button { display: none !important; }
+                            body { font-size: 12px; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${receiptHtml}
+                    <script>
+                        window.onload = function() {
+                            setTimeout(function() {
+                                window.print();
+                                window.close();
+                            }, 200);
+                        };
+                    <\/script>
+                </body>
+            </html>
+        `);
             printWindow.document.close();
         });
 
-        // Close receipt button
+        // Close receipt button - no longer forces reload
         $("#closeReceiptBtn").on("click", function () {
             receiptModal.hide();
-            window.location.reload(); // Refresh to update status
+            location.reload();
         });
     }
+
+    $("#statusFilter").on("change", function () {
+        var selected = $(this).val();
+
+        $("table tbody tr").each(function () {
+            var rowStatus = $(this).data("status");
+
+            if (selected === "all" || rowStatus === selected) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
 });

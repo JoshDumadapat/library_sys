@@ -28,6 +28,6 @@ class Payment extends Model
 
     public function fines()
     {
-        return $this->hasMany(Fine::class);
+        return $this->hasMany(Fine::class, 'payment_id', 'payment_id');
     }
 }

@@ -20,6 +20,7 @@ class Fine extends Model
         'fine_status',
         'collected_by',
         'ftype_id',
+        'payment_id',
     ];
 
     const REASON_OVERDUE = 'overdue';
@@ -55,6 +56,6 @@ class Fine extends Model
 
     public function payment()
     {
-        return $this->belongsTo(Payment::class);
+        return $this->belongsTo(Payment::class, 'payment_id', 'payment_id');
     }
 }
