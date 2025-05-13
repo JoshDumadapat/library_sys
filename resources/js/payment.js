@@ -105,6 +105,9 @@ $(document).ready(function () {
                     $modal
                         .find("#modalMemberName")
                         .text(response.transaction.member_name || "N/A");
+                    $("#modalTransactionDate").text(
+                        response.transaction.transaction_date
+                    );
 
                     // Store data for payment processing
                     $("#paymentTransactionId").val(transactionId);

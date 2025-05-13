@@ -37,7 +37,7 @@ class FinesController extends Controller
             'user:id,first_name,last_name,id',
             'transDetails' => function ($query) {
                 $query->with([
-                    'book:book_ID,title',
+                    'book:book_id,title',
                     'fines'
                 ]);
             }
@@ -52,7 +52,7 @@ class FinesController extends Controller
                     'amount' => $fine->fine_amt,
                     'reason' => $fine->reason,
                     'status' => $fine->fine_status,
-                    'created_at' => $fine->created_at->format('m-d-Y')
+                    'created_at' => $fine->created_at->format('F d, Y')
                 ];
             });
         });
@@ -63,7 +63,7 @@ class FinesController extends Controller
                 'id' => $transaction->trans_ID,
                 'member_name' => $transaction->user->first_name . ' ' . $transaction->user->last_name,
                 'member_id' => $transaction->user->user_id, // Fixed null member_id
-                'transaction_date' => $transaction->created_at->format('m-d-Y')
+                'transaction_date' => $transaction->created_at->format('F d, Y')
             ],
             'fines' => $fines,
             'total_amount' => $fines->sum('amount')
