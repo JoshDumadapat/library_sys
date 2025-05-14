@@ -37,6 +37,7 @@
                         <ul class="list-unstyled">
                             <li><a href="{{ route('admin.dashboard') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/dashboard.png') }}" alt="Dashboard" class="sidebar-icon"> <span>Dashboard</span></a></li>
                             <li><a href="{{ route('admin.manageBooks') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/manage.png') }}" alt="Manage Books" class="sidebar-icon"> <span>Manage&nbsp;Books</span></a></li>
+                            <li><a href="{{ route('admin.requests.index') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/request.png') }}" alt="Requests" class="sidebar-icon"> <span>Requests</span></a></li>
                             <li><a href="{{ route('admin.lend') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/lend.png') }}" alt="Lend" class="sidebar-icon"> <span>Lend</span></a></li>
                             <li><a href="{{ route('admin.return') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/return.png') }}" alt="Return" class="sidebar-icon"> <span>Return</span></a></li>
                             <li><a href="{{ route('admin.fines') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/fine.png') }}" alt="Fine" class="sidebar-icon"> <span>Fines</span></a></li>
@@ -112,8 +113,10 @@
     </div>
 
     <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         const tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {

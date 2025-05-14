@@ -53,18 +53,27 @@ class User extends Authenticatable
      */
     public function address()
     {
-        return $this->hasOne(Address::class,'user_id');
+        return $this->hasOne(Address::class, 'user_id');
     }
 
     public function transactions()
-{
-    return $this->hasMany(Transaction::class, 'user_id');
-}
+    {
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
 
-public function handledTransactions()
-{
-    return $this->hasMany(Transaction::class, 'handled_by');
-}
+    public function handledTransactions()
+    {
+        return $this->hasMany(Transaction::class, 'handled_by');
+    }
 
-}
 
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isMember()
+    {
+        return $this->role === 'member';
+    }
+}

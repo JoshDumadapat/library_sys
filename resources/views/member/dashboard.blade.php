@@ -101,7 +101,7 @@
 
                 <div class="col-lg-4 mb-2">
                     <!-- Wrap the card with an anchor tag to make it clickable -->
-                    <a href="{{ url('/book-requests') }}" class="card text-center border border-light shadow" style="border-radius: 10px; text-decoration: none;">
+                    <a href="{{ url('/member/requests') }}" class="card text-center border border-light shadow" style="border-radius: 10px; text-decoration: none;">
                         <div class="card-body d-flex align-items-center">
                             <img src="{{ asset('storage/images/reqs.png') }}" alt="Book Requests Icon" style="width: 60px; height: 60px; margin-right: 10px;">
                             <div>

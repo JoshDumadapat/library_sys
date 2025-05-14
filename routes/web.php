@@ -11,6 +11,8 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ReturnBookController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AdminBookRequestController;
+use App\Http\Controllers\MemberBookRequestController;
 
 // Homepage
 Route::get('/', function () {
@@ -112,15 +114,43 @@ Route::get('/transactions/check-book-availability/{bookId}', [TransactionControl
 
 
 //MEMBER ROUTES
-Route::get('/request-book', function () {
-    return view('member.requestbook'); // This will point to the view/member/requestbook.blade.php file
-});
-Route::get('/book-requests', function () {
-    return view('member.bookrequest'); // This points to resources/views/member/bookrequested.blade.php
-});
+// Route::get('/request-book', function () {
+//     return view('member.requestbook'); // This will point to the view/member/requestbook.blade.php file
+// });
+// Route::get('/book-requests', function () {
+//     return view('member.bookrequest'); // This points to resources/views/member/bookrequested.blade.php
+// });
 Route::get('/borrowed-books', function () {
     return view('member.borrowedbook'); // This points to resources/views/member/bookrequested.blade.php
 });
 Route::get('/overdue-books', function () {
     return view('member.borrowedbook'); // This points to resources/views/member/bookrequested.blade.php
+});
+Route::prefix('member/requests')->group(function () {
+    Route::get('/', [MemberBookRequestController::class, 'index'])->name('member.requests.index');
+    Route::get('/create', [MemberBookRequestController::class, 'create'])->name('member.requests.create');
+    Route::post('/', [MemberBookRequestController::class, 'store'])->name('member.requests.store');
+});
+
+
+
+//new added
+
+// // Member routes
+// Route::middleware(['auth', 'verified'])->group(function () {
+//     Route::prefix('member/requests')->group(function () {
+//         Route::get('/', [MemberBookRequestController::class, 'index'])->name('member.requests.index');
+//         Route::get('/create', [MemberBookRequestController::class, 'create'])->name('member.requests.create');
+//         Route::post('/', [MemberBookRequestController::class, 'store'])->name('member.requests.store');
+//     });
+// });
+
+// Admin routes
+
+Route::prefix('admin/requests')->group(function () {
+    Route::get('/', [AdminBookRequestController::class, 'index'])->name('admin.requests.index');
+    Route::get('/{bookRequest}', [AdminBookRequestController::class, 'show'])->name('admin.requests.show');
+    Route::post('/{bookRequest}/approve', [AdminBookRequestController::class, 'approve'])->name('admin.requests.approve');
+    Route::post('/{bookRequest}/reject', [AdminBookRequestController::class, 'reject'])->name('admin.requests.reject');
+    Route::post('/{bookRequest}/lend', [AdminBookRequestController::class, 'lend'])->name('admin.requests.lend');
 });

@@ -20,9 +20,9 @@
                 <!-- Search Bar and Add Button Section (will be hidden when adding a book) -->
                 <div id="search-and-add" class="d-flex justify-content-between mb-3">
                     <div class="input-group w-50">
-                        <input type="text" class="form-control" placeholder="Search Books" aria-label="Search Books">
+                        <input type="text" class="form-control" placeholder="Search Books" aria-label="Search Books" style="height: 40px;">
                         <div class="input-group-append">
-                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <span class="input-group-text" style="height: 40px;"><i class="bi bi-search"></i></span>
                         </div>
                     </div>
                     <!-- Add Book Button -->
