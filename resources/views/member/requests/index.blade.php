@@ -15,6 +15,13 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>LunaBooks | My Book Requests</title>
+    <style>
+        .badge-completed {
+            background-color: #0d6efd;
+            /* Bootstrap blue */
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
@@ -94,6 +101,7 @@
                     <table class="custom-table">
                         <thead class="bg-gray-100 text-gray-700">
                             <tr>
+                                <th class="px-5 py-2 border">Request ID</th>
                                 <th class="px-5 py-2 border">Book Title</th>
                                 <th class="px-5 py-2 border">Status</th>
                                 <th class="px-5 py-2 border">Request Date</th>
@@ -103,11 +111,13 @@
                         <tbody>
                             @foreach($requests as $request)
                             <tr>
+                                <td class="px-4 py-2 border">{{ $request->request_id }}</td>
                                 <td class="px-4 py-2 border">{{ $request->book->title }}</td>
                                 <td class="px-4 py-2 border">
                                     <span class="badge 
                                         @if($request->status == 'approved') bg-success 
                                         @elseif($request->status == 'rejected') bg-danger 
+                                        @elseif($request->status == 'completed') badge-completed
                                         @else bg-warning @endif">
                                         {{ ucfirst($request->status) }}
                                     </span>
@@ -116,6 +126,8 @@
                                 <td class="px-4 py-2 border text-center">
                                     @if($request->status == 'approved')
                                     <button class="btn btn-add">Pick Up</button>
+                                    @elseif($request->status == 'completed')
+                                    <button class="btn btn-secondary" disabled>Completed</button>
                                     @else
                                     <button class="btn btn-secondary" disabled>No Action</button>
                                     @endif
@@ -167,12 +179,12 @@
         const statusFilter = document.createElement('select');
         statusFilter.className = 'form-select w-auto';
         statusFilter.innerHTML = `
-    <option value="">All Statuses</option>
-    <option value="pending">Pending</option>
-    <option value="approved">Approved</option>
-    <option value="rejected">Rejected</option>
-    <option value="completed">Completed</option>
-`;
+            <option value="">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+            <option value="completed">Completed</option>
+        `;
         statusFilter.value = new URLSearchParams(window.location.search).get('status') || '';
 
         statusFilter.addEventListener('change', function() {
@@ -188,12 +200,14 @@
         const sortDropdown = document.createElement('select');
         sortDropdown.className = 'form-select w-auto ms-2';
         sortDropdown.innerHTML = `
-    <option value="">Sort By</option>
-    <option value="created_at_desc">Newest First</option>
-    <option value="created_at_asc">Oldest First</option>
-    <option value="title_asc">Title (A-Z)</option>
-    <option value="title_desc">Title (Z-A)</option>
-`;
+            <option value="">Sort By</option>
+            <option value="created_at_desc">Newest First</option>
+            <option value="created_at_asc">Oldest First</option>
+            <option value="title_asc">Title (A-Z)</option>
+            <option value="title_desc">Title (Z-A)</option>
+            <option value="id_desc">Request ID (Newest)</option>
+            <option value="id_asc">Request ID (Oldest)</option>
+        `;
 
         // Set initial sort value
         const urlParams = new URLSearchParams(window.location.search);

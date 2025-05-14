@@ -135,7 +135,7 @@
                                         data-author="{{ $book->authors->pluck('au_lname')->join(', ') }}"
                                         data-isbn="{{ $book->isbn }}"
                                         data-available="{{ $book->isAvailable() ? 'Available' : 'Unavailable' }}"
-                                        data-copies="{{ $book->total_copies - $book->borrowedCopies()->count() }}/{{ $book->total_copies }}"
+                                        data-copies="{{ $book->availableCopies() }}/{{ $book->total_copies }}"
                                         data-cover="{{ $book->cover_image ?? asset('storage/images/book-placeholder.png') }}">
                                         {{ $book->title }}
                                         @if($book->authors->isNotEmpty())

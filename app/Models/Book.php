@@ -66,26 +66,6 @@ class Book extends Model
     }
 
 
-
-    //newly added
-
-    public function borrowedCopies()
-    {
-        return $this->hasMany(BookRequest::class, 'book_ID')
-            ->whereIn('status', ['approved', 'borrowed']);
-    }
-
-    public function requests()
-    {
-        return $this->hasMany(BookRequest::class, 'book_ID');
-    }
-
-    public function isAvailable()
-    {
-        return $this->total_copies > $this->borrowedCopies()->count();
-    }
-
-
     public function scopeAvailable($query)
     {
         return $query->whereRaw('total_copies > (
@@ -94,5 +74,24 @@ class Book extends Model
         WHERE trans_details.book_ID = books.book_ID
         AND transactions.return_date IS NULL
     )');
+    }
+
+    //new added
+
+    public function borrowedCopies()
+    {
+        return $this->transDetails()->whereHas('transaction', function ($query) {
+            $query->whereNull('return_date'); // assuming return_date means the book was returned
+        });
+    }
+
+    public function availableCopies()
+    {
+        return $this->total_copies - $this->borrowedCopies()->count();
+    }
+
+    public function isAvailable()
+    {
+        return $this->availableCopies() > 0;
     }
 }

@@ -140,7 +140,7 @@
                                     <span class="input-group-text"><i class="bi bi-search"></i></span>
                                 </div>
                                 <!-- Add Book Button -->
-                                <a href="{{ url('/request-book') }}" class="btn btn-add" style="background-color: #246484;">Request Book</a>
+                                <a href="{{ url('/requests') }}" class="btn btn-add" style="background-color: #246484;">Request Book</a>
                             </div>
 
 

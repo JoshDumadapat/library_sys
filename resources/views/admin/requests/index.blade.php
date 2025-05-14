@@ -67,20 +67,20 @@
                                         <td>{{ $request->book->authors->pluck('au_lname')->join(', ') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($request->created_at)->format('M d, Y h:i A') }}</td>
                                         <td class="text-end">
-                                            <div class="btn-group" role="group">
-                                                <a href="{{ route('admin.requests.show', $request) }}" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="View Details">
-                                                    <i class="bi bi-eye"></i>
+                                            <div class="d-flex gap-2 justify-content-end">
+                                                <a href="{{ route('admin.requests.show', $request) }}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-eye me-1"></i> View
                                                 </a>
                                                 <form action="{{ route('admin.requests.approve', $request) }}" method="POST" class="d-inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip" title="Approve Request">
-                                                        <i class="bi bi-check-lg"></i>
+                                                    <button type="submit" class="btn btn-sm btn-outline-success">
+                                                        <i class="bi bi-check-lg me-1"></i> Approve
                                                     </button>
                                                 </form>
                                                 <form action="{{ route('admin.requests.reject', $request) }}" method="POST" class="d-inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" title="Reject Request">
-                                                        <i class="bi bi-x-lg"></i>
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                        <i class="bi bi-x-lg me-1"></i> Reject
                                                     </button>
                                                 </form>
                                             </div>
@@ -131,14 +131,14 @@
                                         <td>{{ $request->book->authors->pluck('au_lname')->join(', ') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($request->processed_at)->format('M d, Y h:i A') }}</td>
                                         <td class="text-end">
-                                            <div class="btn-group" role="group">
-                                                <a href="{{ route('admin.requests.show', $request) }}" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="View Details">
-                                                    <i class="bi bi-eye"></i>
+                                            <div class="d-flex gap-2 justify-content-end">
+                                                <a href="{{ route('admin.requests.show', $request) }}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-eye me-1"></i> View
                                                 </a>
                                                 <form action="{{ route('admin.requests.lend', $request) }}" method="POST" class="d-inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip" title="Lend Book">
-                                                        <i class="bi bi-bookmark-check"></i>
+                                                    <button type="submit" class="btn btn-sm btn-outline-success">
+                                                        <i class="bi bi-bookmark-check me-1"></i> Lend
                                                     </button>
                                                 </form>
                                             </div>
@@ -158,12 +158,6 @@
     @section('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize tooltips
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.map(function(tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
-
             // Confirm before actions
             const approveForms = document.querySelectorAll('form[action*="/approve"]');
             const rejectForms = document.querySelectorAll('form[action*="/reject"]');
