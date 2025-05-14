@@ -13,6 +13,7 @@ use App\Http\Controllers\ReturnBookController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AdminBookRequestController;
 use App\Http\Controllers\MemberBookRequestController;
+use App\Http\Controllers\AdminReportController;
 
 // Homepage
 Route::get('/', function () {
@@ -35,7 +36,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/return', [ReturnBookController::class, 'showLendingRecords'])->name('admin.return');
     Route::get('/admin/fine', [FinesController::class, 'index'])->name('admin.fines');
     Route::get('/admin/members', [AdminController::class, 'members'])->name('admin.members');
-    Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report');
+
+    //DASHBOARD CAR ROUTES ivan
+    Route::get('admin/managebooks/index', [BookController::class, 'index'])->name('admin.managebooks.index');
+    Route::get('/dashboard', [BookController::class, 'dashboard']);
+
+
+    //REPORT ROUTE CHANGES
+    // web.php (routes)
+    Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report'); // Reports route
+
+    // These are already in place for lending-specific reports
+    Route::get('admin/report/lending', [AdminReportController::class, 'showLendingReport'])->name('reports.lending');
+    Route::get('admin/report/lending/pdf', [AdminReportController::class, 'generateLendingReportPDF'])->name('reports.lending.pdf');
+    //END
+
     Route::get('/admin/employees', [AdminController::class, 'employees'])->name('admin.employees');
     Route::get('/admin/settings', [AdminController::class, 'settings'])->name('admin.settings');
     Route::post('/{trans_id}/update', [ReturnBookController::class, 'updateBookStatus'])->name('return.update');
@@ -154,3 +169,14 @@ Route::prefix('admin/requests')->group(function () {
     Route::post('/{bookRequest}/reject', [AdminBookRequestController::class, 'reject'])->name('admin.requests.reject');
     Route::post('/{bookRequest}/lend', [AdminBookRequestController::class, 'lend'])->name('admin.requests.lend');
 });
+
+//Rica added this
+Route::get('/fines/generate-report', [FinesController::class, 'generateReport'])->name('fines.generate-report');
+
+
+// For the print preview route
+// PDF Export
+Route::get('/reports/lending/pdf', [AdminReportController::class, 'pdf'])->name('reports.lending.pdf');
+
+// Print View
+Route::get('/reports/lending/print', [AdminReportController::class, 'print'])->name('reports.lending.print');

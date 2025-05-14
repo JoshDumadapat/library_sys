@@ -68,18 +68,24 @@
                                         <td>{{ \Carbon\Carbon::parse($request->created_at)->format('M d, Y h:i A') }}</td>
                                         <td class="text-end">
                                             <div class="d-flex gap-2 justify-content-end">
-                                                <a href="{{ route('admin.requests.show', $request) }}" class="btn btn-sm btn-outline-primary">
+                                                <a href="{{ route('admin.requests.show', $request) }}" class="btn btn-sm btn-outline-primary" style="background-color: #0d6efd; color: white; border-color: #0d6efd;"
+                                                    onmouseover="this.style.backgroundColor='#0a58ca'; this.style.borderColor='#0a58ca'; this.style.color='white';"
+                                                    onmouseout="this.style.backgroundColor='#0d6efd'; this.style.borderColor='#0d6efd'; this.style.color='white';">
                                                     <i class="bi bi-eye me-1"></i> View
                                                 </a>
                                                 <form action="{{ route('admin.requests.approve', $request) }}" method="POST" class="d-inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-sm btn-outline-success">
+                                                    <button type="submit" class="btn btn-sm btn-outline-success" style="background-color: #198754; color: white; border-color: #198754;"
+                                                        onmouseover="this.style.backgroundColor='#157347'; this.style.borderColor='#157347'; this.style.color='white';"
+                                                        onmouseout="this.style.backgroundColor='#198754'; this.style.borderColor='#198754'; this.style.color='white';">
                                                         <i class="bi bi-check-lg me-1"></i> Approve
                                                     </button>
                                                 </form>
                                                 <form action="{{ route('admin.requests.reject', $request) }}" method="POST" class="d-inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" style="background-color: #dc3545; color: white; border-color: #dc3545;"
+                                                        onmouseover="this.style.backgroundColor='#c82333'; this.style.borderColor='#c82333'; this.style.color='white';"
+                                                        onmouseout="this.style.backgroundColor='#dc3545'; this.style.borderColor='#dc3545'; this.style.color='white';">
                                                         <i class="bi bi-x-lg me-1"></i> Reject
                                                     </button>
                                                 </form>
@@ -132,12 +138,16 @@
                                         <td>{{ \Carbon\Carbon::parse($request->processed_at)->format('M d, Y h:i A') }}</td>
                                         <td class="text-end">
                                             <div class="d-flex gap-2 justify-content-end">
-                                                <a href="{{ route('admin.requests.show', $request) }}" class="btn btn-sm btn-outline-primary">
+                                                <a href="{{ route('admin.requests.show', $request) }}" class="btn btn-sm btn-outline-primary" style="background-color: #0d6efd; color: white; border-color: #0d6efd;"
+                                                    onmouseover="this.style.backgroundColor='#0a58ca'; this.style.borderColor='#0a58ca'; this.style.color='white';"
+                                                    onmouseout="this.style.backgroundColor='#0d6efd'; this.style.borderColor='#0d6efd'; this.style.color='white';">
                                                     <i class="bi bi-eye me-1"></i> View
                                                 </a>
                                                 <form action="{{ route('admin.requests.lend', $request) }}" method="POST" class="d-inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-sm btn-outline-success">
+                                                    <button type="submit" class="btn btn-sm btn-outline-success" style="background-color: #198754; color: white; border-color: #198754;"
+                                                        onmouseover="this.style.backgroundColor='#157347'; this.style.borderColor='#157347'; this.style.color='white';"
+                                                        onmouseout="this.style.backgroundColor='#198754'; this.style.borderColor='#198754'; this.style.color='white';">
                                                         <i class="bi bi-bookmark-check me-1"></i> Lend
                                                     </button>
                                                 </form>

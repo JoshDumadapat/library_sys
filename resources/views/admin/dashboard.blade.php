@@ -121,44 +121,58 @@
 
                     <!-- Card 2 - Requests -->
                     <div class="col">
-                        <div class="card h-100 card-hover">
-                            <div class="card-body d-flex shadow justify-content-between align-items-center">
-                                <div>
-                                    <small class="text-secondary" style="font-size: 1.2rem;">Requests</small><br>
-                                    <span class="fw-bold" style="font-size: 2.6rem; color: #DBA910;">008</span>
+                        <a href="{{ route('admin.requests.index') }}" class="text-decoration-none">
+                            <div class="card h-100 card-hover">
+                                <div class="card-body d-flex shadow justify-content-between align-items-center">
+                                    <div>
+                                        <small class="text-secondary" style="font-size: 1.2rem;">Requests</small><br>
+                                        <span class="fw-bold" style="font-size: 2.6rem; color: #DBA910;">
+                                            008
+                                        </span>
+                                    </div>
+                                    <img src="{{ asset('storage/images/reqs.png') }}" alt="Request Icon" style="width: 60px; height: 60px;">
                                 </div>
-                                <img src="{{ asset('storage/images/reqs.png') }}" alt="Request Icon" style="width: 60px; height: 60px;">
                             </div>
-                        </div>
+                        </a>
                     </div>
+
                 </div>
 
                 <div class="row mb-3">
                     <!-- Card 1 - Available Books -->
                     <div class="col">
-                        <div class="card h-100 card-hover">
-                            <div class="card-body d-flex shadow justify-content-between align-items-center">
-                                <div>
-                                    <small class="text-secondary" style="font-size: 1.2rem;">Available Books</small><br>
-                                    <span class="fw-bold" style="font-size: 2.6rem; color: #295183;">050</span>
+                        <a href="{{ route('admin.managebooks.index') }}" class="text-decoration-none">
+                            <div class="card h-100 card-hover">
+                                <div class="card-body d-flex shadow justify-content-between align-items-center">
+                                    <div>
+                                        <small class="text-secondary" style="font-size: 1.2rem;">Total Books</small><br>
+                                        <span class="fw-bold" style="font-size: 2.6rem; color: #295183;">{{ $totalBooksCount }}
+                                        </span>
+                                    </div>
+                                    <img src="{{ asset('storage/images/avail.png') }}" alt="Available Books Icon" style="width: 60px; height: 60px;">
                                 </div>
-                                <img src="{{ asset('storage/images/avail.png') }}" alt="Available Books Icon" style="width: 60px; height: 60px;">
                             </div>
-                        </div>
+                        </a>
                     </div>
+
 
                     <!-- Card 2 - Members -->
                     <div class="col">
-                        <div class="card h-100 card-hover">
-                            <div class="card-body d-flex shadow justify-content-between align-items-center">
-                                <div>
-                                    <small class="text-secondary" style="font-size: 1.2rem;">Members</small><br>
-                                    <span class="text-success fw-bold" style="font-size: 2.6rem;">120</span>
+                        <a href="{{ url('admin/members') }}" class="text-decoration-none">
+                            <div class="card h-100 card-hover">
+                                <div class="card-body d-flex shadow justify-content-between align-items-center">
+                                    <div>
+                                        <small class="text-secondary" style="font-size: 1.2rem;">Members</small><br>
+                                        <span class="text-success fw-bold" style="font-size: 2.6rem;">
+                                            {{ $membersCount }}
+                                        </span>
+                                    </div>
+                                    <img src="{{ asset('storage/images/memb.png') }}" alt="Members Icon" style="width: 60px; height: 60px;">
                                 </div>
-                                <img src="{{ asset('storage/images/memb.png') }}" alt="Members Icon" style="width: 60px; height: 60px;">
                             </div>
-                        </div>
+                        </a>
                     </div>
+
                 </div>
             </div>
 

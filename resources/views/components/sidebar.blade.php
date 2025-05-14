@@ -37,12 +37,23 @@
                         <ul class="list-unstyled">
                             <li><a href="{{ route('admin.dashboard') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/dashboard.png') }}" alt="Dashboard" class="sidebar-icon"> <span>Dashboard</span></a></li>
                             <li><a href="{{ route('admin.manageBooks') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/manage.png') }}" alt="Manage Books" class="sidebar-icon"> <span>Manage&nbsp;Books</span></a></li>
-                            <li><a href="{{ route('admin.requests.index') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/request.png') }}" alt="Requests" class="sidebar-icon"> <span>Requests</span></a></li>
+                            <li>
+                                <a href="{{ route('admin.requests.index') }}" class="sidebar-item">
+                                    <img src="{{ asset('storage/images/sidebar/request.png') }}" alt="Requests" class="sidebar-icon">
+                                    <span>Requests</span>
+                                    @if($pendingRequestCount > 0)
+                                    <span class="badge bg-danger ms-2">{{ $pendingRequestCount }}</span>
+                                    @endif
+                                </a>
+                            </li>
                             <li><a href="{{ route('admin.lend') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/lend.png') }}" alt="Lend" class="sidebar-icon"> <span>Lend</span></a></li>
                             <li><a href="{{ route('admin.return') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/return.png') }}" alt="Return" class="sidebar-icon"> <span>Return</span></a></li>
                             <li><a href="{{ route('admin.fines') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/fine.png') }}" alt="Fine" class="sidebar-icon"> <span>Fines</span></a></li>
                             <li><a href="{{ route('admin.members') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/members.png') }}" style="width: 22px;" alt="Members" class="sidebar-icon"> <span>Members</span></a></li>
-                            <li><a href="{{ route('admin.report') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/report.png') }}" style="width: 25px;" alt="Report" class="sidebar-icon"> <span>Report</span></a></li>
+                            <li><a href="{{ route('reports.lending') }}" class="sidebar-item">
+                                    <img src="{{ asset('storage/images/sidebar/report.png') }}" style="width: 25px;" alt="Report" class="sidebar-icon">
+                                    <span>Report</span>
+                                </a></li>
                             <li><a href="{{ route('admin.employees') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/members.png') }}" style="width: 22px;" alt="Members" class="sidebar-icon"> <span>Employees</span></a></li>
                             <li><a href="{{ route('admin.settings') }}" class="sidebar-item"><img src="{{ asset('storage/images/sidebar/setting.png') }}" style="width: 24px;" alt="Settings" class="sidebar-icon"> <span>Settings</span></a></li>
                         </ul>

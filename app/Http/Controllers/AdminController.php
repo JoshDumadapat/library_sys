@@ -15,7 +15,9 @@ class AdminController extends Controller
 
     public function index()
     {
-        return view('admin.dashboard');
+        $totalBooksCount = Book::count(); // Count all books newly added ivan
+        $membersCount = User::where('role', 'member')->count(); //new
+        return view('admin.dashboard', compact('totalBooksCount', 'membersCount')); //also this
     }
 
     public function manageBooks()
@@ -39,9 +41,11 @@ class AdminController extends Controller
         return view('admin.members');
     }
 
-    public function report()
+    public function report(Request $request)
     {
-        return view('admin.report');
+        $adminReportController = new AdminReportController();
+
+        return $adminReportController->showLendingReport($request);
     }
 
     public function employees()

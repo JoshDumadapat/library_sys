@@ -132,4 +132,85 @@ class FinesController extends Controller
     {
         return $this->index(); // Just calls the existing index method
     }
+
+
+    //rica added this
+    /**
+     * Generate fines report
+     */
+    public function generateReport(Request $request)
+    {
+        $status = $request->input('status', 'all');
+
+        $query = Transaction::has('transDetails.fines')
+            ->with(['user', 'transDetails.book', 'transDetails.fines'])
+            ->orderBy('created_at', 'desc');
+
+        // Apply status filter if not 'all'
+        if ($status !== 'all') {
+            $query->whereHas('transDetails.fines', function ($q) use ($status) {
+                if ($status === 'paid') {
+                    $q->where('fine_status', 'paid');
+                } elseif ($status === 'unpaid') {
+                    $q->where('fine_status', 'unpaid');
+                } elseif ($status === 'pending') {
+                    $q->where('fine_status', 'pending');
+                }
+            });
+        }
+
+        $transactions = $query->get();
+
+        $totalAmount = 0;
+        $paidAmount = 0;
+        $unpaidAmount = 0;
+        $pendingAmount = 0;
+
+        // Process transactions for report data
+        $reportData = $transactions->map(function ($transaction) use (&$totalAmount, &$paidAmount, &$unpaidAmount, &$pendingAmount) {
+            $finesCount = 0;
+            $transactionTotal = 0;
+            $hasUnpaid = false;
+            $hasPaid = false;
+
+            foreach ($transaction->transDetails as $detail) {
+                $finesCount += $detail->fines->count();
+                foreach ($detail->fines as $fine) {
+                    $transactionTotal += $fine->fine_amt;
+                    $totalAmount += $fine->fine_amt;
+
+                    if ($fine->fine_status == 'paid') {
+                        $paidAmount += $fine->fine_amt;
+                        $hasPaid = true;
+                    } elseif ($fine->fine_status == 'unpaid') {
+                        $unpaidAmount += $fine->fine_amt;
+                        $hasUnpaid = true;
+                    } else {
+                        $pendingAmount += $fine->fine_amt;
+                    }
+                }
+            }
+
+            $status = $hasUnpaid ? 'unpaid' : ($hasPaid ? 'paid' : 'pending');
+
+            return [
+                'transaction_id' => $transaction->trans_ID,
+                'member_name' => $transaction->user->first_name . ' ' . $transaction->user->last_name,
+                'fines_count' => $finesCount,
+                'total_amount' => $transactionTotal,
+                'status' => $status,
+                'transaction_date' => $transaction->created_at->format('F d, Y')
+            ];
+        });
+
+        return view('admin.fines.report', [
+            'transactions' => $reportData,
+            'totalAmount' => $totalAmount,
+            'paidAmount' => $paidAmount,
+            'unpaidAmount' => $unpaidAmount,
+            'pendingAmount' => $pendingAmount,
+            'filterStatus' => $status,
+            'reportDate' => now()->format('F d, Y')
+        ]);
+    }
 }

@@ -102,13 +102,14 @@
                                 <h5 class="fw-bold mb-3">Book Lending</h5>
                                 <form action="{{ route('admin.requests.lend', $bookRequest) }}" method="POST">
                                     @csrf
-                                    <div class="mb-3">
-                                        <label for="due_date" class="form-label">Due Date</label>
-                                        <input type="date" class="form-control" id="due_date" name="due_date" required min="{{ date('Y-m-d') }}">
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ route('admin.requests.index') }}" class="btn btn-secondary">
+                                            <i class="bi bi-arrow-left me-1"></i> Back to Requests
+                                        </a>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-bookmark-check me-1"></i> Lend Book Now
+                                        </button>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-bookmark-check me-1"></i> Lend Book Now
-                                    </button>
                                 </form>
                             </div>
                         </div>

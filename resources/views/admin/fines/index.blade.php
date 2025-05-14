@@ -26,6 +26,7 @@
                     <div>
                         <button id="generate-report-btn" class="btn btn-add" style="background-color: #246484; font-size:1.1rem;">
                             <i class="bi bi-file-earmark-text"></i> Generate Report
+                            <span id="report-spinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
                         </button>
                     </div>
                 </div>
@@ -207,6 +208,34 @@
         </div>
     </div>
 </x-sidebar>
+
+<script>
+    $(document).ready(function() {
+        $('#generate-report-btn').click(function() {
+            // Show loading spinner
+            $(this).prop('disabled', true);
+            $('#report-spinner').removeClass('d-none');
+
+            // Get current filter value
+            const status = $('#statusFilter').val();
+
+            // Open a new window for the report
+            const reportWindow = window.open('/fines/generate-report?status=' + status, '_blank');
+
+            // When the window loads, focus on it and hide spinner
+            reportWindow.onload = function() {
+                $('#generate-report-btn').prop('disabled', false);
+                $('#report-spinner').addClass('d-none');
+            };
+
+            // Fallback in case window doesn't load properly
+            setTimeout(function() {
+                $('#generate-report-btn').prop('disabled', false);
+                $('#report-spinner').addClass('d-none');
+            }, 3000);
+        });
+    });
+</script>
 
 @vite(['resources/js/pagination.js'])
 @vite(['resources/js/payment.js'])
