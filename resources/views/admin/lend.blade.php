@@ -268,25 +268,26 @@
                     $.get(`/book/${bookId}`, function(book) {
                         selectedBooks.push(bookId);
 
-                        // Ensure related data like author, genre, floor, and shelf_code exist
-                        let author = book.author ? book.author.name : 'N/A'; // Adjust based on your data structure
-                        let floor = book.floor ? book.floor.floor_num : 'N/A'; // Adjust based on your data structure
-                        let shelfCode = book.shelf_code ? book.shelf_code : 'N/A'; // Adjust based on your data structure
-
+                        // FORMAT THE AUTHOR STRING PROPERLY
+                        let authors = book.author.split(', ');
+                        if (authors.length >= 2) {
+                            // Assuming the pattern is "First1, First2 Last2, Last1"
+                            authorDisplay = `${authors[0]} ${authors[2]}, ${authors[1]}`;
+                        } else {
+                            authorDisplay = book.author;
+                        }
                         let row = `
-        <tr>
-            <td>${book.book_id}</td>
-            <td>${book.title}</td>
-            <td>${book.author}</td>
-            <td>${book.isbn}</td>
-            <td>${book.floor}</td>
-            <td>${book.shelf_code}</td>
-        </tr>
-    `;
+            <tr>
+                <td>${book.book_id}</td>
+                <td>${book.title}</td>
+                <td>${authorDisplay}</td>
+                <td>${book.isbn}</td>
+                <td>${book.floor}</td>
+                <td>${book.shelf_code}</td>
+            </tr>
+        `;
                         $('#book-list-body').append(row);
                     });
-
-
                 });
                 // Submit lending transaction
                 // Modify the lend button click handler

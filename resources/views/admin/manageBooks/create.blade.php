@@ -62,25 +62,24 @@
                 {{-- Author(s) --}}
                 <div class="col-md-4 mb-3">
                     <label for="author_ids" style="font-size: 1.1rem;">Author(s) <span style="color: red;">*</span></label>
-                    <select id="author_ids" name="author_ids[]" class="form-control" multiple required style="font-size: 1rem; height: 39px;">
+                    <select id="author_ids" name="author_ids[]" class="form-control select2-authors" multiple required style="font-size: 1rem; width: 100%;">
                         @foreach ($authors as $author)
                         <option value="{{ $author->author_id }}">{{ $author->au_fname }} {{ $author->au_lname }}</option>
                         @endforeach
                     </select>
-                    <small class="form-text text-muted">Hold Ctrl (or Cmd) to select multiple authors.</small>
+                    <small class="form-text text-muted">Start typing to search or add new authors.</small>
                 </div>
 
                 {{-- Genre(s) --}}
                 <div class="col-md-4 mb-3">
                     <label for="genre_ids" style="font-size: 1.1rem;">Genre(s) <span style="color: red;">*</span></label>
-                    <select id="genre_ids" name="genre_ids[]" class="form-control" multiple required style="font-size: 1rem; height: 39px;"">
+                    <select id="genre_ids" name="genre_ids[]" class="form-control select2-genres" multiple required style="font-size: 1rem; width: 100%;">
                         @foreach ($genres as $genre)
-                        <option value=" {{ $genre->genre_id }}">{{ $genre->genre }}</option>
+                        <option value="{{ $genre->genre_id }}">{{ $genre->genre }}</option>
                         @endforeach
                     </select>
-                    <small class="form-text text-muted">Hold Ctrl (or Cmd) to select multiple genres.</small>
+                    <small class="form-text text-muted">Start typing to search or add new genres.</small>
                 </div>
-
 
             </div>
 
@@ -92,6 +91,4 @@
         </form>
     </div>
 </div>
-
-
 @vite('resources/js/manageBooks.js')

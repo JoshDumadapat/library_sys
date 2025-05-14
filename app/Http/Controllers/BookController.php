@@ -8,6 +8,7 @@ use App\Models\Genre;
 use App\Models\Floor;
 use App\Models\Shelf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -41,6 +42,41 @@ class BookController extends Controller
             'genre_ids' => 'required|array',
         ]);
 
+        // Process new authors
+        $authorIds = [];
+        foreach ($request->author_ids as $authorId) {
+            if (str_starts_with($authorId, 'NEW:')) {
+                // This is a new author
+                $authorName = substr($authorId, 4);
+                $names = explode(' ', $authorName, 2);
+
+                $author = Author::create([
+                    'au_fname' => $names[0] ?? '',
+                    'au_lname' => $names[1] ?? '',
+                ]);
+
+                $authorIds[] = $author->author_id;
+            } else {
+                $authorIds[] = $authorId;
+            }
+        }
+
+        // Process new genres
+        $genreIds = [];
+        foreach ($request->genre_ids as $genreId) {
+            if (str_starts_with($genreId, 'NEW:')) {
+                $genreName = substr($genreId, 4);
+
+                $genre = Genre::create([
+                    'genre' => $genreName,
+                ]);
+
+                $genreIds[] = $genre->genre_id;
+            } else {
+                $genreIds[] = $genreId;
+            }
+        }
+
         // Create the book
         $book = Book::create([
             'title' => $request->title,
@@ -52,9 +88,8 @@ class BookController extends Controller
             'shelf_id' => $request->shelf_id,
         ]);
 
-
-        $book->authors()->attach($request->author_ids);
-        $book->genres()->attach($request->genre_ids);
+        $book->authors()->attach($authorIds);
+        $book->genres()->attach($genreIds);
 
         return redirect()->route('managebooks.index')->with('success', 'Book added successfully!');
     }
@@ -200,5 +235,73 @@ class BookController extends Controller
             });
 
         return response()->json($books);
+    }
+
+    //ria added this
+    public function searchAuthors(Request $request)
+    {
+        $search = $request->q;
+
+        $authors = Author::where('au_fname', 'like', '%' . $search . '%')
+            ->orWhere('au_lname', 'like', '%' . $search . '%')
+            ->select('author_id as id', DB::raw("CONCAT(au_fname, ' ', au_lname) as text"))
+            ->paginate(10);
+
+        return response()->json([
+            'results' => $authors->items(),
+            'total_count' => $authors->total()
+        ]);
+    }
+
+    public function storeAuthor(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        // Split the name into first and last name
+        $names = explode(' ', $request->name, 2);
+        $firstName = $names[0] ?? '';
+        $lastName = $names[1] ?? '';
+
+        $author = Author::create([
+            'au_fname' => $firstName,
+            'au_lname' => $lastName,
+        ]);
+
+        return response()->json([
+            'id' => $author->author_id,
+            'text' => $author->au_fname . ' ' . $author->au_lname
+        ]);
+    }
+
+    public function searchGenres(Request $request)
+    {
+        $search = $request->q;
+
+        $genres = Genre::where('genre', 'like', '%' . $search . '%')
+            ->select('genre_id as id', 'genre as text')
+            ->paginate(10);
+
+        return response()->json([
+            'results' => $genres->items(),
+            'total_count' => $genres->total()
+        ]);
+    }
+
+    public function storeGenre(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:genres,genre',
+        ]);
+
+        $genre = Genre::create([
+            'genre' => $request->name,
+        ]);
+
+        return response()->json([
+            'id' => $genre->genre_id,
+            'text' => $genre->genre
+        ]);
     }
 }

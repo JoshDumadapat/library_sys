@@ -11,7 +11,121 @@ document.getElementById("add-book-btn").addEventListener("click", function () {
     fetch("/admin/managebooks/create")
         .then((response) => response.text())
         .then((data) => {
-            document.getElementById("add-book-form-card").innerHTML = data; // Inject the form into the 'add-book-form-card' div
+            document.getElementById("add-book-form-card").innerHTML = data;
+
+            // Initialize Select2 AFTER the form loads
+            $(".select2-authors").select2({
+                tags: true,
+                multiple: true,
+                tokenSeparators: [","],
+                placeholder: "Search or add authors",
+                minimumInputLength: 1,
+                ajax: {
+                    url: "/authors/search",
+                    dataType: "json",
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term,
+                            page: params.page,
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.results,
+                            pagination: {
+                                more: params.page * 10 < data.total_count,
+                            },
+                        };
+                    },
+                    cache: true,
+                },
+                createTag: function (params) {
+                    if (/^\d+$/.test(params.term)) {
+                        return null;
+                    }
+
+                    var term = params.term.trim();
+                    var names = term.split(" ");
+
+                    return {
+                        id: "NEW:" + term,
+                        text: term + " (new)",
+                        newOption: true,
+                    };
+                },
+                templateResult: function (data) {
+                    var $result = $("<span></span>");
+
+                    if (data.newOption) {
+                        $result.text(data.text);
+                        $result.append(
+                            " <span class='badge badge-info'>New</span>"
+                        );
+                    } else {
+                        $result.text(data.text);
+                    }
+
+                    return $result;
+                },
+            });
+
+            // Initialize genre select2
+            $(".select2-genres").select2({
+                tags: true,
+                multiple: true,
+                tokenSeparators: [","],
+                placeholder: "Search or add genres",
+                minimumInputLength: 1,
+                ajax: {
+                    url: "/genres/search",
+                    dataType: "json",
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term,
+                            page: params.page,
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.results,
+                            pagination: {
+                                more: params.page * 10 < data.total_count,
+                            },
+                        };
+                    },
+                    cache: true,
+                },
+                createTag: function (params) {
+                    // Don't create tag if it's a number
+                    if (/^\d+$/.test(params.term)) {
+                        return null;
+                    }
+
+                    return {
+                        id: "NEW:" + params.term.trim(),
+                        text: params.term.trim() + " (new)",
+                        newOption: true,
+                    };
+                },
+                templateResult: function (data) {
+                    var $result = $("<span></span>");
+
+                    if (data.newOption) {
+                        $result.text(data.text);
+                        $result.append(
+                            " <span class='badge badge-info'>New</span>"
+                        );
+                    } else {
+                        $result.text(data.text);
+                    }
+
+                    return $result;
+                },
+            });
         })
         .catch((error) => console.log("Error loading create form:", error));
 });

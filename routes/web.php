@@ -180,3 +180,10 @@ Route::get('/reports/lending/pdf', [AdminReportController::class, 'pdf'])->name(
 
 // Print View
 Route::get('/reports/lending/print', [AdminReportController::class, 'print'])->name('reports.lending.print');
+
+
+//rica aDded
+Route::get('/authors/search', [BookController::class, 'searchAuthors'])->name('authors.search');
+Route::post('/authors/store', [BookController::class, 'storeAuthor'])->name('authors.store');
+Route::get('/genres/search', [BookController::class, 'searchGenres'])->name('genres.search');
+Route::post('/genres/store', [BookController::class, 'storeGenre'])->name('genres.store');
