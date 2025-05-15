@@ -15,15 +15,15 @@
 
                 <hr class="mb-3 mt-0">
                 <div class="d-flex justify-content-between mb-3">
-                    <div class="input-group w-50">
-                        <input type="text" class="form-control" placeholder="Search Books" aria-label="Search Books">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="bi bi-search"></i></span>
-                        </div>
+                    <div class="input-group shadow-sm rounded w-50">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" placeholder="Search Books" aria-label="Search Books" style="height: 40px;">
                     </div>
                     <div>
-                        <button id="lend-book-btn" class="btn me-2 btn-add" style="background-color: #246484; color: white;">Lend Books</button>
-                        <button class="btn btn-view" style="background-color:rgb(240, 240, 240); color:black;">Request</button>
+                        <button id="lend-book-btn" class="btn me-0 btn-add" style="background-color: #246484; color: white;">Lend Books</button>
+                        <!--<button class="btn btn-view" style="background-color:rgb(240, 240, 240); color:black;">Request</button>-->
                     </div>
                 </div>
 
@@ -74,18 +74,23 @@
                         <hr class="mb-4">
                     </div>
                     <div class="row mb-4">
-                        <div class="col-md-4 mb-3">
-                            <label for="member-id" style="font-size: 1.1rem;">Member <span style="color: red;">*</span></label>
-                            <select id="member-id" class="form-control select2" required></select>
+                        <div class="col-md-12 mb-3">
+                            <label for="member-id" style="font-size: 1.1rem; display: block; margin-bottom: 5px;">
+                                Member <span style="color: red;">*</span>
+                            </label>
+                            <select id="member-id" class="form-control select2" required
+                                style="width: 700px; ">
+                            </select>
                         </div>
-                        <div class="col-md-4 mb-3">
+
+                        <!-- <div class="col-md-4 mb-3">
                             <label for="member-name" style="font-size: 1.1rem;">Name <span style="color: red;">*</span></label>
                             <input type="text" id="member-name" class="form-control select2" placeholder="Enter name" required>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="contact-number" style="font-size: 1.1rem;">Contact Number <span style="color: red;">*</span></label>
                             <input type="text" id="contact-number" class="form-control" placeholder="Enter contact number" required>
-                        </div>
+                        </div> -->
                     </div>
 
                     <!-- Book Information -->
@@ -97,11 +102,11 @@
                     <div class="row mb-3">
                         <div class="col-md-6 mb-3">
                             <label for="book-id" style="font-size: 1.1rem;">Search a Book <span style="color: red;">*</span></label>
-                            <select id="book-id" class="form-control" style="width: 100%;" required></select>
+                            <select id="book-id" class="form-control" style="width: 700px;" required></select>
                         </div>
                     </div>
 
-                    <div class="row mb-4">
+                    <!-- <div class="row mb-4">
                         <div class="col-md-4 mb-3">
                             <label for="book-id" style="font-size: 1.1rem;">Book ID <span style="color: red;">*</span></label>
                             <input type="text" id="book-id-input" class="form-control select2" placeholder="Enter book ID" required>
@@ -110,7 +115,7 @@
                             <label for="book-name" style="font-size: 1.1rem;">Book Name <span style="color: red;">*</span></label>
                             <input type="text" id="book-name" class="form-control select2" placeholder="Enter book name" required>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Buttons -->
                     <div class="row mb-3">

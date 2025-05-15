@@ -50,8 +50,9 @@
                 <div class="dropdown position-relative">
                     <img src="{{ asset('storage/images/hero.jpg') }}" alt="Profile" class="profile-img dropbtn">
                     <div class="dropdown-content">
-                        <a href="#"><i class="bi bi-person me-2"></i>Profile</a>
-                        <a href="#"><i class="bi bi-gear me-2"></i>Settings</a>
+                        <a href="{{ route('member.settings') }}"><i class="bi bi-person me-2"></i>Profile</a>
+                        <a href="{{ route('member.settings') }}"><i class="bi bi-gear me-2"></i>Settings</a>
+
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit" class="dropdown-item" style="color: rgb(54, 54, 54); border: none; background: none; width: 100%; text-align: left; padding: 12px 16px;">
@@ -73,10 +74,11 @@
                         <h5 class="fw-bold mb-0">My Book Requests</h5>
                     </div>
                     <div class="col-6 text-end">
+                        <button type="button" class="btn btn-view me-1" id="cancel-btn" style="font-size: 1.1rem;">Back to Dashboard</button>
                         <a href="{{ route('member.requests.create') }}" class="btn btn-add" style="font-size: 1.1rem;">
                             <i class="bi bi-plus-lg"></i> New Request
                         </a>
-                        <button type="button" class="btn btn-add" id="cancel-btn" style="font-size: 1.1rem;">Back to Dashboard</button>
+
                     </div>
                 </div>
                 <hr class="mb-4">
@@ -88,11 +90,11 @@
                 </script>
 
                 <div id="search-and-add" class="d-flex justify-content-between mb-3">
-                    <div class="input-group w-50">
-                        <input type="text" class="form-control" placeholder="Search requests" aria-label="Search Requests">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="bi bi-search"></i></span>
-                        </div>
+                    <div class="input-group shadow-sm rounded w-50">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" placeholder="Search Books" aria-label="Search Books" style="height: 40px;">
                     </div>
                 </div>
 

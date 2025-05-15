@@ -66,7 +66,7 @@
                         <h5 class="fw-bold mb-0">Borrowed Books</h5>
                     </div>
                     <div class="col-6 text-end">
-                        <button type="button" class="btn btn-add" id="cancel-btn" style="font-size: 1.1rem;">Back to Dashboard</button>
+                        <button type="button" class="btn btn-view" id="cancel-btn" style="font-size: 1.1rem;">Back to Dashboard</button>
                     </div>
                 </div>
                 <hr class="mb-4">
@@ -79,11 +79,11 @@
 
 
                 <div id="search-and-add" class="d-flex justify-content-between mb-3">
-                    <div class="input-group w-50">
-                        <input type="text" class="form-control" placeholder="Search request" aria-label="Search Books">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="bi bi-search"></i></span>
-                        </div>
+                    <div class="input-group shadow-sm rounded w-50">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" placeholder="Search Books" aria-label="Search Books" style="height: 40px;">
                     </div>
                 </div>
 

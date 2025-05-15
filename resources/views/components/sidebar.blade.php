@@ -98,9 +98,13 @@
                             <a href="#"><i class="bi bi-gear me-2"></i>Settings</a>
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
-                                <button type="submit" class="dropdown-item" style="color: rgb(54, 54, 54); border: none; background: none; width: 100%; text-align: left; padding: 12px 16px;">
+                                <button type="submit" class="dropdown-item"
+                                    style="color: rgb(54, 54, 54); width: 100%; text-align: left; padding: 12px 16px;"
+                                    onmouseover="this.style.backgroundColor='rgba(0, 0, 0, 0.05)'; this.style.color='inherit';"
+                                    onmouseout="this.style.backgroundColor=''; this.style.color='rgb(54, 54, 54)';">
                                     <i class="bi bi-box-arrow-right me-2"></i>Logout
                                 </button>
+
                             </form>
                         </div>
                     </div>

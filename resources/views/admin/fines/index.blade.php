@@ -31,7 +31,7 @@
                     </div>
                 </div>
 
-                <hr class="mb-3 mt-0">
+                <hr class="mb-3 mt-3">
 
 
 

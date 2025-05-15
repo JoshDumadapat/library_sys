@@ -14,6 +14,10 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AdminBookRequestController;
 use App\Http\Controllers\MemberBookRequestController;
 use App\Http\Controllers\AdminReportController;
+use App\Http\Controllers\MemberTransactionController;
+use App\Http\Controllers\MemberDashboardController;
+use App\Http\Controllers\MemberProfileController;
+use App\Http\Controllers\MemberPasswordController;
 
 // Homepage
 Route::get('/', function () {
@@ -134,10 +138,10 @@ Route::get('/transactions/check-book-availability/{bookId}', [TransactionControl
 // });
 // Route::get('/book-requests', function () {
 //     return view('member.bookrequest'); // This points to resources/views/member/bookrequested.blade.php
+// // });
+// Route::get('/borrowed-books', function () {
+//     return view('member.borrowedbook'); // This points to resources/views/member/bookrequested.blade.php
 // });
-Route::get('/borrowed-books', function () {
-    return view('member.borrowedbook'); // This points to resources/views/member/bookrequested.blade.php
-});
 Route::get('/overdue-books', function () {
     return view('member.borrowedbook'); // This points to resources/views/member/bookrequested.blade.php
 });
@@ -187,3 +191,33 @@ Route::get('/authors/search', [BookController::class, 'searchAuthors'])->name('a
 Route::post('/authors/store', [BookController::class, 'storeAuthor'])->name('authors.store');
 Route::get('/genres/search', [BookController::class, 'searchGenres'])->name('genres.search');
 Route::post('/genres/store', [BookController::class, 'storeGenre'])->name('genres.store');
+
+//new
+Route::middleware(['auth'])->group(function () {
+    Route::get('/member/transaction/{id}', [MemberTransactionController::class, 'getLendingDetails'])->name('member.view-lend');
+});
+Route::get('/member/transaction/{id}', [MemberTransactionController::class, 'viewTransaction'])->name('member.transaction.view');
+
+Route::get('/member/borrowed-book', [MemberTransactionController::class, 'showMyBorrowedBooks'])->name('member.borrowedbooks')->middleware('auth');
+Route::get('member/my-borrowed-books', [MemberTransactionController::class, 'myBorrowedBooks'])->name('member.borrowed-books');
+Route::get('/member/transaction/{id}', [MemberTransactionController::class, 'viewTransaction']);
+
+
+//member dashboard card route 
+Route::get('/member/dashboard', [MemberDashboardController::class, 'index'])->name('member.dashboard');
+
+//for profile dropdown
+Route::get('/member/settings', function () {
+    return view('member.settings');
+})->name('member.settings')->middleware('auth');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/member/profile', [MemberProfileController::class, 'edit'])->name('member.settings');
+    Route::put('/member/profile', [MemberProfileController::class, 'update'])->name('member.profile.update');
+});
+
+// Show the change password form
+Route::get('/member/password/change', [MemberPasswordController::class, 'showChangeForm'])->name('member.password.change');
+
+// Handle the change password submission
+Route::post('/member/password/change', [MemberPasswordController::class, 'changePassword'])->name('member.password.update');

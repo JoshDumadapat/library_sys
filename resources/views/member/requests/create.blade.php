@@ -90,8 +90,9 @@
                 <div class="dropdown position-relative">
                     <img src="{{ asset('storage/images/hero.jpg') }}" alt="Profile" class="profile-img dropbtn">
                     <div class="dropdown-content">
-                        <a href="#"><i class="bi bi-person me-2"></i>Profile</a>
-                        <a href="#"><i class="bi bi-gear me-2"></i>Settings</a>
+                        <a href="{{ route('member.settings') }}"><i class="bi bi-person me-2"></i>Profile</a>
+                        <a href="{{ route('member.settings') }}"><i class="bi bi-gear me-2"></i>Settings</a>
+
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit" class="dropdown-item" style="color: rgb(54, 54, 54); border: none; background: none; width: 100%; text-align: left; padding: 12px 16px;">
@@ -113,7 +114,7 @@
                         <h5 class="fw-bold mb-0">Request Books</h5>
                     </div>
                     <div class="col-6 text-end">
-                        <button type="button" class="btn btn-add" id="cancel-btn" style="font-size: 1.1rem;">
+                        <button type="button" class="btn btn-view" id="cancel-btn" style="font-size: 1.1rem;">
                             <i class="bi bi-arrow-left"></i> Back to Requests
                         </button>
                     </div>

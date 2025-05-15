@@ -21,10 +21,13 @@
     <div class="container-fluid" style="height: 100%;">
         <!-- Top Row -->
         <div class="row mt-3 mx-2">
-            <div class="col">
-                <h4 class="fw-bold p-0 m-0">{{ Auth::user()->first_name.' '.Auth::user()->last_name ?? 'Guest' }}</h4>
-                <p class="p-0 m-0">{{ ucfirst(Auth::user()->role ?? 'N/A') }}</p>
+            <div class="col d-flex align-items-center">
+                <img src="{{ asset('storage/images/favicon.png') }}" alt="Logo" style="width: 70px; height: 60px; margin-right: 15px;">
+                <div class="col">
+                    <h4 class="fw-bold p-0 m-0">{{ Auth::user()->first_name.' '.Auth::user()->last_name ?? 'Guest' }}</h4>
+                    <p class="p-0 m-0">{{ ucfirst(Auth::user()->role ?? 'N/A') }}</p>
 
+                </div>
             </div>
             <div class="col d-flex justify-content-end align-items-center">
                 <label class="switch shadow-sm" data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -39,8 +42,9 @@
                     <img src="{{ asset('storage/images/hero.jpg') }}" alt="Profile"
                         class="profile-img dropbtn">
                     <div class="dropdown-content">
-                        <a href="#"><i class="bi bi-person me-2"></i>Profile</a>
-                        <a href="#"><i class="bi bi-gear me-2"></i>Settings</a>
+                        <a href="{{ route('member.settings') }}"><i class="bi bi-person me-2"></i>Profile</a>
+                        <a href="{{ route('member.settings') }}"><i class="bi bi-gear me-2"></i>Settings</a>
+
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit" class="dropdown-item" style="color: rgb(54, 54, 54); border: none; background: none; width: 100%; text-align: left; padding: 12px 16px;">
@@ -63,14 +67,14 @@
                             <div class="text-container ms-3">
                                 <h2 class="card-title fw-bold mb-3">Welcome back to LunaBooks!</h2>
                                 <p class="card-text mb-4">Start your transactions now with LunaBooks.</p>
-                                <a href="/register" class="btn-dashboard"
+                                <a href="{{ url('/member/requests') }}" class="btn-dashboard"
                                     style="text-decoration: none; 
           padding: 10px 100px; 
           background-color: black; 
           color: white; 
           border-radius: 50px; 
           display: inline-block;">
-                                    Add Books
+                                    Request Books
                                 </a>
                             </div>
                         </div>
@@ -85,46 +89,48 @@
         <div class="main-content-container">
             <!-- Stats Cards -->
             <div class="row mb-3">
-                <div class="col-lg-4 mb-2">
-                    <a href="{{ url('/borrowed-books') }}" class="card text-center border border-light shadow" style="border-radius: 10px; text-decoration: none;">
-                        <div class="card text-center border border-light shadow" style="border-radius: 10px;">
-                            <div class="card-body d-flex align-items-center">
-                                <img src="{{ asset('storage/images/avail.png') }}" alt="Borrowed Books Icon" style="width: 60px; height: 60px; margin-right: 10px;">
-                                <div>
-                                    <h5 class="card-title">Borrowed Books</h5>
-                                    <span class="fw-bold" style="font-size: 2rem; color: #295183;">050</span>
-                                </div>
+                <div class="col-lg-6 mb-2">
+                    <a href="{{ route('member.borrowed-books') }}"
+                        class="card text-center border border-light" style="border-radius: 10px; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                        <div class="card-body d-flex align-items-center">
+                            <img src="{{ asset('storage/images/avail.png') }}" alt="Borrowed Books Icon" style="width: 60px; height: 60px; margin-right: 10px;">
+                            <div class="text-start ms-3">
+                                <h5 class="card-title">Borrowed Books</h5>
+                                <span class="fw-bold" style="font-size: 2rem; color: #295183;">
+                                    {{ $borrowedBooksCount ?? 0 }}
+                                </span>
                             </div>
                         </div>
                     </a>
                 </div>
 
-                <div class="col-lg-4 mb-2">
-                    <!-- Wrap the card with an anchor tag to make it clickable -->
-                    <a href="{{ url('/member/requests') }}" class="card text-center border border-light shadow" style="border-radius: 10px; text-decoration: none;">
+                <div class="col-lg-6 mb-2">
+                    <a href="{{ url('/member/requests') }}" class="card text-center border border-light" style="border-radius: 10px; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
                         <div class="card-body d-flex align-items-center">
                             <img src="{{ asset('storage/images/reqs.png') }}" alt="Book Requests Icon" style="width: 60px; height: 60px; margin-right: 10px;">
-                            <div>
+                            <div class="text-start ms-3">
                                 <h5 class="card-title">Book Requests</h5>
-                                <span class="fw-bold" style="font-size: 2rem; color: #DBA910;">008</span>
+                                <span class="fw-bold" style="font-size: 2rem; color: #DBA910;">
+                                    {{ $bookRequestsCount ?? 0 }}
+                                </span>
                             </div>
                         </div>
                     </a>
                 </div>
 
-                <div class="col-lg-4 mb-2">
-                    <a href="{{ url('/overdue-books') }}" class="card text-center border border-light shadow" style="border-radius: 10px; text-decoration: none;">
-                        <div class="card text-center border border-light shadow" style="border-radius: 10px;">
-                            <div class="card-body d-flex align-items-center">
-                                <img src="{{ asset('storage/images/od.png') }}" alt="Overdue Books Icon" style="width: 60px; height: 60px; margin-right: 10px;">
-                                <div>
-                                    <h5 class="card-title">Overdue Books</h5>
-                                    <span class="fw-bold text-danger" style="font-size: 2rem;">002</span>
-                                </div>
+
+                <!-- <div class="col-lg-4 mb-2">
+                    <a href="{{ url('/overdue-books') }}" class="card text-center border border-light" style="border-radius: 10px; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                        <div class="card-body d-flex align-items-center">
+                            <img src="{{ asset('storage/images/od.png') }}" alt="Overdue Books Icon" style="width: 60px; height: 60px; margin-right: 10px;">
+                            <div class="text-start ms-3">
+                                <h5 class="card-title">Overdue Books</h5>
+                                <span class="fw-bold text-danger" style="font-size: 2rem;">002</span>
                             </div>
                         </div>
                     </a>
-                </div>
+                </div> -->
+
             </div>
 
             <!-- Main Table and Search -->
@@ -135,12 +141,14 @@
 
                             <!-- Search bar and Requests button -->
                             <div id="search-and-add" class="d-flex justify-content-between mb-3">
-                                <div class="input-group w-50">
-                                    <input type="text" class="form-control" placeholder="Search Books" aria-label="Search Books">
-                                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                <div class="input-group shadow-sm rounded w-50">
+                                    <span class="input-group-text bg-white border-end-0">
+                                        <i class="bi bi-search"></i>
+                                    </span>
+                                    <input type="text" class="form-control border-start-0" placeholder="Search Books" aria-label="Search Books" style="height: 40px;">
                                 </div>
                                 <!-- Add Book Button -->
-                                <a href="{{ url('/requests') }}" class="btn btn-add" style="background-color: #246484;">Request Book</a>
+                                <a href="{{ url('/member/requests') }}" class="btn btn-add" style="background-color: #246484;">Request Book</a>
                             </div>
 
 
@@ -149,33 +157,36 @@
                                 <table class="custom-table" id="myTable">
                                     <thead class="bg-gray-100 text-gray-700">
                                         <tr>
+                                            <th class="px-5 py-2 border" style="width: 200px;">Book ID</th>
                                             <th class="px-5 py-2 border" style="width: 200px;">Title</th>
                                             <th class="px-5 py-2 border" style="width: 150px;">Author</th>
-                                            <th class="px-5 py-2 border" style="width: 150px;">Genre / Category</th>
+                                            <th class="px-5 py-2 border" style="width: 150px;">Genre</th>
                                             <th class="px-5 py-2 border" style="width: 100px;">ISBN</th>
                                             <th class="px-5 py-2 border" style="width: 100px;">Available</th>
                                             <th class="px-5 py-2 border" style="width: 100px;">Lended</th>
                                             <th class="px-5 py-2 border" style="width: 100px;">Status</th>
-                                            <th class="px-5 py-2 border" style="width: 100px;">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($books as $book)
                                         <tr>
+                                            <td>{{ $book->book_id }}</td>
                                             <td class="px-4 py-2 border">{{ $book->title }}</td>
-                                            <td class="px-4 py-2 border">
-                                                {{ $book->authors->pluck('name')->join(', ') }}
+                                            <td>
+                                                @foreach($book->authors as $index => $author)
+                                                {{ $author->au_fname }} {{ $author->au_lname }}@if(!$loop->last), @endif
+                                                @endforeach
                                             </td>
-                                            <td class="px-4 py-2 border">
-                                                {{ $book->genres->pluck('name')->join(', ') }}
+
+                                            <td>
+                                                @foreach($book->genres as $genre)
+                                                {{ $genre->genre }}
+                                                @endforeach
                                             </td>
                                             <td class="px-4 py-2 border">{{ $book->isbn }}</td>
                                             <td class="px-4 py-2 border">{{ $book->available_copies }}</td>
                                             <td class="px-4 py-2 border">{{ $book->lended_copies }}</td>
                                             <td class="px-4 py-2 border">{{ $book->book_status }}</td>
-                                            <td class="px-4 py-2 border text-center">
-                                                <button class="btn btn-add">View</button>
-                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>

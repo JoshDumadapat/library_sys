@@ -19,12 +19,13 @@
                 <hr class="mb-3 mt-0">
                 <!-- Search Bar and Add Button Section (will be hidden when adding a book) -->
                 <div id="search-and-add" class="d-flex justify-content-between mb-3">
-                    <div class="input-group w-50">
-                        <input type="text" class="form-control" placeholder="Search Books" aria-label="Search Books" style="height: 40px;">
-                        <div class="input-group-append">
-                            <span class="input-group-text" style="height: 40px;"><i class="bi bi-search"></i></span>
-                        </div>
+                    <div class="input-group shadow-sm rounded w-50">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" placeholder="Search Books" aria-label="Search Books" style="height: 40px;">
                     </div>
+
                     <!-- Add Book Button -->
                     <button id="add-book-btn" class="btn btn-add" style="background-color: #246484;">+ Add Book</button>
                 </div>
@@ -34,7 +35,7 @@
                     <table class="custom-table">
                         <thead>
                             <tr>
-                                <th scope="col"></th> <!-- Blank header for checkbox column -->
+                                <!--<th scope="col"></th>   Blank header for checkbox column -->
                                 <th scope="col">Book ID</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Author</th>
@@ -49,7 +50,7 @@
                         <tbody id="book-table-body">
                             @foreach($books as $book)
                             <tr>
-                                <td><input type="checkbox" value="{{ $book->id }}"></td>
+                                <!--<td><input type="checkbox" value="{{ $book->id }}"></td>-->
                                 <td>{{ $book->book_id }}</td>
                                 <td>{{ $book->title }}</td>
 
@@ -77,11 +78,11 @@
                                 <!-- Display shelf code -->
                                 <td>{{ $book->shelf->shelf_code }}</td> <!-- Assuming 'shelf_code' is the field in Shelf model -->
 
-                                <td>
-                                    <button class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#bookModal" data-book_id="{{ $book->book_id }}">
+                                <td style="display: flex; gap: 6px; flex-wrap: nowrap;">
+                                    <button class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#bookModal" data-book_id="{{ $book->book_id }}" style="flex: 1 1 auto; font-size: 0.85rem; padding: 6px 10px; white-space: nowrap;">
                                         <i class="bi bi-pencil-square me-1"></i>&nbsp;Edit
                                     </button>
-                                    <button class="btn btn-delete" data-book_id="{{ $book->book_id }}">
+                                    <button class="btn btn-delete" data-book_id="{{ $book->book_id }}" style="flex: 1 1 auto; font-size: 0.85rem; padding: 6px 10px; white-space: nowrap;">
                                         <i class="bi bi-trash me-1"></i>&nbsp;Delete
                                     </button>
                                 </td>

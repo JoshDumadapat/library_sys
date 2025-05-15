@@ -22,20 +22,21 @@
                     </div>
 
                     <div class="col-md-auto d-flex align-items-center">
-                        <label class="me-2 mb-0 fw-semibold text-muted">From</label>
+                        <label class="me-2 mb-0 fw-semibold">From</label>
+
                         <input type="date" class="form-control shadow-sm" name="from_date" value="{{ request('from_date') }}">
                     </div>
 
                     <div class="col-md-auto d-flex align-items-center">
-                        <label class="mx-2 mb-0 fw-semibold text-muted">To</label>
+                        <label class="mx-2 mb-0 fw-semibold ">To</label>
                         <input type="date" class="form-control shadow-sm" name="to_date" value="{{ request('to_date') }}">
                     </div>
 
                     <div class="col-md-auto d-flex gap-2">
-                        <button class="btn btn-outline-primary shadow-sm" type="submit">
+                        <button class="btn btn-primary shadow-sm" type="submit">
                             <i class="bi bi-funnel"></i> Filter
                         </button>
-                        <a href="{{ route('reports.lending') }}" class="btn btn-outline-secondary shadow-sm">
+                        <a href="{{ route('reports.lending') }}" class="btn btn-secondary shadow-sm">
                             <i class="bi bi-arrow-clockwise"></i> Reset
                         </a>
                         <button type="button" id="generate-print-btn" class="btn btn-add shadow-sm"

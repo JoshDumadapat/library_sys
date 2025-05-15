@@ -17,11 +17,11 @@
                 <hr class="mb-3 mt-0">
 
                 <div class="d-flex justify-content-between mb-3">
-                    <div class="input-group w-100">
-                        <input type="text" class="form-control" placeholder="Search Books" aria-label="Search Books">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="bi bi-search" aria-hidden="true"></i></span>
-                        </div>
+                    <div class="input-group shadow-sm rounded w-50">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" placeholder="Search Books" aria-label="Search Books" style="height: 40px;">
                     </div>
                 </div>
 
@@ -204,7 +204,9 @@
                         <button type="button" id="payNowBtn" class="btn btn-success">
                             <i class="bi bi-credit-card"></i> Pay Now
                         </button>
-                        <button type="button" id="payLaterBtn" class="btn btn-outline-secondary">
+                        <button type="button" id="payLaterBtn" class="btn " style="background-color: #6c757d; color: white; border-color: #6c757d;"
+                            onmouseover="this.style.backgroundColor='#5a6268';"
+                            onmouseout="this.style.backgroundColor='#6c757d';">
                             <i class="bi bi-clock"></i> Pay Later
                         </button>
                     </div>

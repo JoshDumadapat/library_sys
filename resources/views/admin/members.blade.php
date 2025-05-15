@@ -16,11 +16,11 @@
                 <hr class="mb-3 mt-0">
 
                 <div class="d-flex justify-content-between mb-3">
-                    <div class="input-group w-100">
-                        <input type="text" class="form-control" placeholder="Search Member" aria-label="Search Member">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="bi bi-search"></i></span>
-                        </div>
+                    <div class="input-group shadow-sm rounded w-50">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" placeholder="Search Books" aria-label="Search Books" style="height: 40px;">
                     </div>
                 </div>
 
@@ -39,42 +39,42 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="book-table-body"> 
-                        @foreach($members as $member)
-                                <tr>
-                                    <td>{{ $member->id }}</td>
-                                    <td>{{ $member->first_name }} {{ $member->last_name }}</td>
-                                    <td>{{ $member->email }}</td>
-                                    <td>{{ $member->contact_num }}</td>
-                                    <td>
-                                        {{ $member->address->street ?? '' }},
-                                        {{ $member->address->city ?? '' }},
-                                        {{ $member->address->region ?? '' }}
-                                    </td>
+                        <tbody id="book-table-body">
+                            @foreach($members as $member)
+                            <tr>
+                                <td>{{ $member->id }}</td>
+                                <td>{{ $member->first_name }} {{ $member->last_name }}</td>
+                                <td>{{ $member->email }}</td>
+                                <td>{{ $member->contact_num }}</td>
+                                <td>
+                                    {{ $member->address->street ?? '' }},
+                                    {{ $member->address->city ?? '' }},
+                                    {{ $member->address->region ?? '' }}
+                                </td>
 
-                                    <td>
-                                        @if($member->status === 'Active')
-                                            <span class="badge bg-success">Active</span>
-                                        @else
-                                            <span class="badge bg-warning text-black">Inactive</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <form action="{{ route('admin.members.deactivate', $member->id) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            <button type="submit" class="btn btn-delete" style="border-radius: 8px;">
-                                                <i class="bi bi-person-x me-1"></i>&nbsp;Deactivate
-                                            </button>
-                                        </form>
+                                <td>
+                                    @if($member->status === 'Active')
+                                    <span class="badge bg-success">Active</span>
+                                    @else
+                                    <span class="badge bg-warning text-black">Inactive</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <form action="{{ route('admin.members.deactivate', $member->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-delete" style="border-radius: 8px;">
+                                            <i class="bi bi-person-x me-1"></i>&nbsp;Deactivate
+                                        </button>
+                                    </form>
 
-                                        <form action="{{ route('admin.members.activate', $member->id) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            <button type="submit" class="btn btn-add" style="border-radius: 8px;">
-                                                <i class="bi bi-person-check me-1"></i>Activate
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
+                                    <form action="{{ route('admin.members.activate', $member->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-add" style="border-radius: 8px;">
+                                            <i class="bi bi-person-check me-1"></i>Activate
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
 
@@ -86,4 +86,4 @@
         </div>
     </div>
 </x-sidebar>
-@vite('resources/js/pagination.js')  
+@vite('resources/js/pagination.js')

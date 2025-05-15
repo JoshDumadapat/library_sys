@@ -43,8 +43,9 @@
                 <div class="dropdown position-relative">
                     <img src="{{ asset('storage/images/hero.jpg') }}" alt="Profile" class="profile-img dropbtn">
                     <div class="dropdown-content">
-                        <a href="#"><i class="bi bi-person me-2"></i>Profile</a>
-                        <a href="#"><i class="bi bi-gear me-2"></i>Settings</a>
+                        <a href="{{ route('member.settings') }}"><i class="bi bi-person me-2"></i>Profile</a>
+                        <a href="{{ route('member.settings') }}"><i class="bi bi-gear me-2"></i>Settings</a>
+
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit" class="dropdown-item" style="color: rgb(54, 54, 54); border: none; background: none; width: 100%; text-align: left; padding: 12px 16px;">
@@ -66,7 +67,7 @@
                         <h5 class="fw-bold mb-0">Borrowed Books</h5>
                     </div>
                     <div class="col-6 text-end">
-                        <button type="button" class="btn btn-add" id="cancel-btn" style="font-size: 1.1rem;">Back to Dashboard</button>
+                        <button type="button" class="btn btn-view" id="cancel-btn" style="font-size: 1.1rem;">Back to Dashboard</button>
                     </div>
                 </div>
                 <hr class="mb-4">
@@ -79,11 +80,11 @@
 
 
                 <div id="search-and-add" class="d-flex justify-content-between mb-3">
-                    <div class="input-group w-50">
-                        <input type="text" class="form-control" placeholder="Search request" aria-label="Search Books">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="bi bi-search"></i></span>
-                        </div>
+                    <div class="input-group shadow-sm rounded w-50">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0" placeholder="Search Books" aria-label="Search Books" style="height: 40px;">
                     </div>
                 </div>
 
@@ -101,37 +102,33 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse($transactions as $transaction)
                             <tr>
-                                <td class="px-4 py-2 border">REQ12345</td>
-                                <td class="px-4 py-2 border">2025-05-10</td>
-                                <td class="px-4 py-2 border">2025-06-10</td>
-                                <td class="px-4 py-2 border">5</td>
-                                <td class="px-4 py-2 border">Pending</td>
-                                <td class="px-4 py-2 border text-center">
-                                    <button class="btn btn-add">View</button>
+                                <td class="px-4 py-2 border">{{ $transaction->trans_ID }}</td>
+                                <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($transaction->borrow_date)->format('F j, Y') }}</td>
+                                <td class="px-4 py-2 border">{{ \Carbon\Carbon::parse($transaction->due_date)->format('F j, Y') }}</td>
+                                <td class="px-4 py-2 border">{{ $transaction->trans_details_count }}</td>
+                                <td class="px-4 py-2 border">
+                                    @if($transaction->return_date)
+                                    Returned
+                                    @else
+                                    Pending
+                                    @endif
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-sm view-details-btn"
+                                        data-trans-id="{{ $transaction->trans_ID }}">
+                                        View
+                                    </button>
                                 </td>
                             </tr>
+                            @empty
                             <tr>
-                                <td class="px-4 py-2 border">REQ12345</td>
-                                <td class="px-4 py-2 border">2025-05-10</td>
-                                <td class="px-4 py-2 border">2025-06-10</td>
-                                <td class="px-4 py-2 border">5</td>
-                                <td class="px-4 py-2 border">Pending</td>
-                                <td class="px-4 py-2 border text-center">
-                                    <button class="btn btn-add">View</button>
-                                </td>
+                                <td colspan="6" class="text-center py-3">No borrowed books found.</td>
                             </tr>
-                            <tr>
-                                <td class="px-4 py-2 border">REQ12345</td>
-                                <td class="px-4 py-2 border">2025-05-10</td>
-                                <td class="px-4 py-2 border">2025-06-10</td>
-                                <td class="px-4 py-2 border">5</td>
-                                <td class="px-4 py-2 border">Pending</td>
-                                <td class="px-4 py-2 border text-center">
-                                    <button class="btn btn-add">View</button>
-                                </td>
-                            </tr>
+                            @endforelse
                         </tbody>
+
                     </table>
 
                 </div>
@@ -146,6 +143,75 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle view details button click
+            document.querySelectorAll('.view-details').forEach(button => {
+                button.addEventListener('click', function() {
+                    const transId = this.getAttribute('data-transid');
+                    window.location.href = `/member/transactions/${transId}`;
+                });
+            });
+
+            // Search functionality
+            document.querySelector('input[placeholder="Search Books"]').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                document.querySelectorAll('tbody tr').forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = new bootstrap.Modal(document.getElementById('transactionDetailsModal'));
+            const modalBody = document.getElementById('transaction-details-content');
+
+            document.querySelectorAll('.view-details-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const transId = button.getAttribute('data-trans-id');
+                    modalBody.innerHTML = '<p>Loading...</p>';
+                    modal.show();
+
+                    fetch(`/member/transaction/${transId}`)
+                        .then(response => {
+                            if (!response.ok) throw new Error('Network response was not ok');
+                            return response.text(); // assuming the controller returns a view partial or HTML
+                        })
+                        .then(html => {
+                            modalBody.innerHTML = html;
+                        })
+                        .catch(error => {
+                            modalBody.innerHTML = '<p class="text-danger">Failed to load details.</p>';
+                            console.error('Error fetching transaction details:', error);
+                        });
+                });
+            });
+        });
+    </script>
+
+    <!-- Transaction Details Modal -->
+    <div class="modal fade" id="transactionDetailsModal" tabindex="-1" aria-labelledby="transactionDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="transactionDetailsModalLabel">Transaction Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Details will be loaded here -->
+                    <div id="transaction-details-content">
+                        <p>Loading...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>
