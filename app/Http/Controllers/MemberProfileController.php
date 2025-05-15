@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use App\Models\address;
+use App\Models\Address;
 
 
 class MemberProfileController extends Controller
@@ -20,48 +20,47 @@ class MemberProfileController extends Controller
     {
         $user = Auth::user();
 
-        // Validate form data
-        $request->validate([
+        $validated = $request->validate([
             'first_name' => 'required|string|max:255',
-            'last_name'  => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'contact_num' => 'required|string|max:20',
-            'email'      => 'required|email|max:255|unique:users,email,' . $user->id,
-            'street'     => 'required|string|max:255',
-            'city'       => 'required|string|max:255',
-            'region'     => 'required|string|max:255',
-
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'street' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'region' => 'required|string|max:255',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Update user info
-        $user->first_name = $request->first_name;
-        $user->last_name  = $request->last_name;
-        $user->contact_no = $request->contact_no;
-        $user->email      = $request->email;
+        // Update user
+        $user->update([
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'contact_num' => $validated['contact_num'],
+            'email' => $validated['email'],
+        ]);
 
-        // Handle profile picture upload
-        if ($request->hasFile('profile_picture')) {
-            // Delete old profile picture if exists
-            if ($user->profile_picture) {
-                Storage::delete($user->profile_picture);
-            }
-
-            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
-            $user->profile_picture = $path;
-        }
-
-        $user->save();
-
-        // Update or create address (assuming user has a one-to-one address relationship)
+        // Update or create address
         $addressData = [
-            'street' => $request->street,
-            'city'   => $request->city,
-            'region' => $request->region,
+            'street' => $validated['street'],
+            'city' => $validated['city'],
+            'region' => $validated['region'],
         ];
 
         if ($user->address) {
             $user->address()->update($addressData);
         } else {
             $user->address()->create($addressData);
+        }
+
+        // Handle profile picture upload
+        if ($request->hasFile('profile_picture')) {
+            // Delete old profile picture if exists
+            if ($user->profile_picture_path) {
+                Storage::delete($user->profile_picture_path);
+            }
+
+            $path = $request->file('profile_picture')->store('profile-pictures');
+            $user->update(['profile_picture_path' => $path]);
         }
 
         return redirect()->route('member.settings')->with('success', 'Profile updated successfully!');

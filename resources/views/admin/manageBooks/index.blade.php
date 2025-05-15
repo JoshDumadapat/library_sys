@@ -23,9 +23,8 @@
                         <span class="input-group-text bg-white border-end-0">
                             <i class="bi bi-search"></i>
                         </span>
-                        <input type="text" class="form-control border-start-0" placeholder="Search Books" aria-label="Search Books" style="height: 40px;">
+                        <input type="text" id="book-search" class="form-control border-start-0" placeholder="Search Books" aria-label="Search Books" style="height: 40px;">
                     </div>
-
                     <!-- Add Book Button -->
                     <button id="add-book-btn" class="btn btn-add" style="background-color: #246484;">+ Add Book</button>
                 </div>
@@ -35,7 +34,7 @@
                     <table class="custom-table">
                         <thead>
                             <tr>
-                                <!--<th scope="col"></th>   Blank header for checkbox column -->
+                                <th scope="col"></th> <!-- Blank header for checkbox column -->
                                 <th scope="col">Book ID</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Author</th>
@@ -49,8 +48,8 @@
                         </thead>
                         <tbody id="book-table-body">
                             @foreach($books as $book)
-                            <tr>
-                                <!--<td><input type="checkbox" value="{{ $book->id }}"></td>-->
+                            <tr class="book-row">
+                                <td><input type="checkbox" value="{{ $book->id }}"></td>
                                 <td>{{ $book->book_id }}</td>
                                 <td>{{ $book->title }}</td>
 
@@ -65,7 +64,7 @@
                                 <!-- Display genre names -->
                                 <td>
                                     @foreach($book->genres as $genre)
-                                    {{ $genre->genre }} <!-- Assuming 'name' is the field in Genre model -->
+                                    {{ $genre->genre }}
                                     @endforeach
                                 </td>
 
@@ -73,16 +72,16 @@
                                 <td>{{ $book->total_copies }}</td>
 
                                 <!-- Display floor code -->
-                                <td>{{ $book->floor->floor_num }}</td> <!-- Assuming 'floor_code' is the field in Floor model -->
+                                <td>{{ $book->floor->floor_num }}</td>
 
                                 <!-- Display shelf code -->
-                                <td>{{ $book->shelf->shelf_code }}</td> <!-- Assuming 'shelf_code' is the field in Shelf model -->
+                                <td>{{ $book->shelf->shelf_code }}</td>
 
-                                <td style="display: flex; gap: 6px; flex-wrap: nowrap;">
-                                    <button class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#bookModal" data-book_id="{{ $book->book_id }}" style="flex: 1 1 auto; font-size: 0.85rem; padding: 6px 10px; white-space: nowrap;">
+                                <td>
+                                    <button class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#bookModal" data-book_id="{{ $book->book_id }}">
                                         <i class="bi bi-pencil-square me-1"></i>&nbsp;Edit
                                     </button>
-                                    <button class="btn btn-delete" data-book_id="{{ $book->book_id }}" style="flex: 1 1 auto; font-size: 0.85rem; padding: 6px 10px; white-space: nowrap;">
+                                    <button class="btn btn-delete" data-book_id="{{ $book->book_id }}">
                                         <i class="bi bi-trash me-1"></i>&nbsp;Delete
                                     </button>
                                 </td>
@@ -112,8 +111,18 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             $(document).ready(function() {
+                // Search functionality
+                $('#book-search').on('keyup', function() {
+                    const searchText = $(this).val().toLowerCase();
+                    $('.book-row').each(function() {
+                        const rowText = $(this).text().toLowerCase();
+                        $(this).toggle(rowText.includes(searchText));
+                    });
+                });
+
+                // Existing delete functionality
                 $('.btn-delete').click(function() {
-                    const book_id = $(this).data('book_id'); // ✅ extract data attribute
+                    const book_id = $(this).data('book_id');
 
                     if (confirm('Are you sure you want to delete this book?')) {
                         $.ajax({
@@ -127,14 +136,13 @@
                             },
                             success: function(response) {
                                 alert(response.message);
-                                location.reload(); // refresh the list
+                                location.reload();
                             },
                             error: function(xhr) {
                                 alert('Error deleting book.');
                                 console.error(xhr.responseText);
                             }
                         });
-
                     }
                 });
             });

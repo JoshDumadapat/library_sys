@@ -95,7 +95,13 @@ class TransactionController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Books successfully lent'
+                'message' => 'Books successfully lent',
+                'transaction' => [
+                    'id' => $transaction->trans_ID, // or whatever your primary key is called
+                    'borrow_date' => $transaction->borrow_date,
+                    'due_date' => $transaction->due_date,
+                    // Add any other fields you want to display on the receipt
+                ]
             ]);
         } catch (\Exception $e) {
             DB::rollBack();

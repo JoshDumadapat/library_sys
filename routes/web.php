@@ -18,6 +18,7 @@ use App\Http\Controllers\MemberTransactionController;
 use App\Http\Controllers\MemberDashboardController;
 use App\Http\Controllers\MemberProfileController;
 use App\Http\Controllers\MemberPasswordController;
+use App\Http\Controllers\AdminSettingsController;
 
 // Homepage
 Route::get('/', function () {
@@ -221,3 +222,11 @@ Route::get('/member/password/change', [MemberPasswordController::class, 'showCha
 
 // Handle the change password submission
 Route::post('/member/password/change', [MemberPasswordController::class, 'changePassword'])->name('member.password.update');
+
+
+// Admin Settings Routes
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/settings', [AdminSettingsController::class, 'index'])->name('admin.settings');
+    Route::post('/settings/update-profile', [AdminSettingsController::class, 'updateProfile'])->name('admin.settings.profile.update');
+    Route::post('/settings/update-fines', [AdminSettingsController::class, 'updateFines'])->name('admin.settings.fines.update');
+});

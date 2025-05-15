@@ -207,6 +207,76 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Search functionality
+            $('.input-group input').on('keyup', function() {
+                const searchText = $(this).val().toLowerCase();
+                const $rows = $('#myTable tbody tr');
+
+                $rows.each(function() {
+                    const rowText = $(this).text().toLowerCase();
+                    $(this).toggle(rowText.includes(searchText));
+                });
+
+                updatePagination();
+            });
+
+            // Pagination variables
+            const rowsPerPage = 10;
+            let currentPage = 1;
+            let $rows = $('#myTable tbody tr');
+
+            // Initialize pagination
+            function updatePagination() {
+                $rows = $('#myTable tbody tr:visible');
+                const totalPages = Math.ceil($rows.length / rowsPerPage);
+
+                // Clear existing page numbers
+                $('#pageNumbers').empty();
+
+                // Add page numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    $('#pageNumbers').append(
+                        `<span class="page-number ${i === currentPage ? 'active' : ''}">${i}</span>`
+                    );
+                }
+
+                // Show/hide rows based on current page
+                $rows.hide();
+                $rows.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage).show();
+
+                // Enable/disable previous/next buttons
+                $('#prevBtn').prop('disabled', currentPage === 1);
+                $('#nextBtn').prop('disabled', currentPage === totalPages || totalPages === 0);
+            }
+
+            // Pagination event handlers
+            $('#prevBtn').click(function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updatePagination();
+                }
+            });
+
+            $('#nextBtn').click(function() {
+                const totalPages = Math.ceil($rows.length / rowsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updatePagination();
+                }
+            });
+
+            $(document).on('click', '.page-number', function() {
+                currentPage = parseInt($(this).text());
+                updatePagination();
+            });
+
+            // Initialize on page load
+            updatePagination();
+        });
+    </script>
 </body>
 
 </html>

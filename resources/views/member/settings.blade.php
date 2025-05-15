@@ -57,7 +57,21 @@
         </div>
 
         <div class="content">
-
+            @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show mx-3 mt-3" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
+            @if($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
             <div class="card mt-5 me-3 ms-3" style="height: 830px; overflow-y: auto; border-radius: 12px;">
                 <div class="card-body px-4 py-4">
 
@@ -83,9 +97,9 @@
                                     value="{{ old('last_name', Auth::user()->last_name) }}" required />
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="contact-no">Contact No. <span style="color:red">*</span></label>
-                                <input type="text" name="contact_no" id="contact-no" class="form-control"
-                                    value="{{ old('contact_no', Auth::user()->contact_num) }}" required />
+                                <label for="contact-num">Contact No. <span style="color:red">*</span></label>
+                                <input type="text" name="contact_num" id="contact-num" class="form-control"
+                                    value="{{ old('contact_num', Auth::user()->contact_num) }}" required />
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="street">Street <span style="color:red">*</span></label>

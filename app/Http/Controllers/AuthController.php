@@ -30,7 +30,7 @@ class AuthController extends Controller
             'password' => 'required|min:6|confirmed',
         ]);
 
-        // Create new user
+
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,

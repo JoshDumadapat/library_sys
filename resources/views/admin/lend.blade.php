@@ -83,14 +83,6 @@
                             </select>
                         </div>
 
-                        <!-- <div class="col-md-4 mb-3">
-                            <label for="member-name" style="font-size: 1.1rem;">Name <span style="color: red;">*</span></label>
-                            <input type="text" id="member-name" class="form-control select2" placeholder="Enter name" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="contact-number" style="font-size: 1.1rem;">Contact Number <span style="color: red;">*</span></label>
-                            <input type="text" id="contact-number" class="form-control" placeholder="Enter contact number" required>
-                        </div> -->
                     </div>
 
                     <!-- Book Information -->
@@ -105,17 +97,6 @@
                             <select id="book-id" class="form-control" style="width: 700px;" required></select>
                         </div>
                     </div>
-
-                    <!-- <div class="row mb-4">
-                        <div class="col-md-4 mb-3">
-                            <label for="book-id" style="font-size: 1.1rem;">Book ID <span style="color: red;">*</span></label>
-                            <input type="text" id="book-id-input" class="form-control select2" placeholder="Enter book ID" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="book-name" style="font-size: 1.1rem;">Book Name <span style="color: red;">*</span></label>
-                            <input type="text" id="book-name" class="form-control select2" placeholder="Enter book name" required>
-                        </div>
-                    </div> -->
 
                     <!-- Buttons -->
                     <div class="row mb-3">
@@ -197,12 +178,11 @@
                     }
                 });
 
-                // Add this to your member select change handler
+                // Check for unpaid fines when member changes
                 $('#member-id').on('change', function() {
                     let memberId = $(this).val();
                     if (!memberId) return;
 
-                    // Check for unpaid fines
                     $.get('/transactions/check-fines/' + memberId)
                         .done(function(res) {
                             if (res.has_fines) {
@@ -223,20 +203,17 @@
                         delay: 250,
                         processResults: function(data) {
                             return {
-                                results: data // Already formatted properly by the backend
+                                results: data
                             };
                         }
-
-
                     }
                 });
 
-                // Add this to your book select change handler
+                // Check book availability when book changes
                 $('#book-id').on('change', function() {
                     let bookId = $(this).val();
                     if (!bookId) return;
 
-                    // Check book availability
                     $.get('/transactions/check-book-availability/' + bookId)
                         .done(function(res) {
                             if (!res.is_available) {
@@ -255,6 +232,7 @@
                 $.get('/transactions/next-id', function(data) {
                     $('#lending-id').val(data.next_id);
                 });
+
                 let today = new Date().toISOString().split('T')[0];
                 $('#date-borrowed').val(today);
                 let due = new Date();
@@ -263,6 +241,7 @@
 
                 // Add book to table
                 let selectedBooks = [];
+                let selectedBooksData = [];
 
                 $('#add-book-btn').on('click', function(e) {
                     e.preventDefault();
@@ -272,40 +251,35 @@
 
                     $.get(`/book/${bookId}`, function(book) {
                         selectedBooks.push(bookId);
+                        selectedBooksData.push(book);
 
-                        // FORMAT THE AUTHOR STRING PROPERLY
                         let authors = book.author.split(', ');
-                        if (authors.length >= 2) {
-                            // Assuming the pattern is "First1, First2 Last2, Last1"
-                            authorDisplay = `${authors[0]} ${authors[2]}, ${authors[1]}`;
-                        } else {
-                            authorDisplay = book.author;
-                        }
+                        let authorDisplay = authors.length >= 2 ?
+                            `${authors[0]} ${authors[2]}, ${authors[1]}` : book.author;
+
                         let row = `
-            <tr>
-                <td>${book.book_id}</td>
-                <td>${book.title}</td>
-                <td>${authorDisplay}</td>
-                <td>${book.isbn}</td>
-                <td>${book.floor}</td>
-                <td>${book.shelf_code}</td>
-            </tr>
-        `;
+                    <tr>
+                        <td>${book.book_id}</td>
+                        <td>${book.title}</td>
+                        <td>${authorDisplay}</td>
+                        <td>${book.isbn}</td>
+                        <td>${book.floor}</td>
+                        <td>${book.shelf_code}</td>
+                    </tr>
+                `;
                         $('#book-list-body').append(row);
                     });
                 });
+
                 // Submit lending transaction
-                // Modify the lend button click handler
                 $('#lend-books-btn').on('click', function(e) {
                     e.preventDefault();
 
-                    // Validate member selection
                     if (!$('#member-id').val()) {
                         alert('Please select a member first');
                         return;
                     }
 
-                    // Validate at least one book selected
                     if (selectedBooks.length === 0) {
                         alert('Please add at least one book');
                         return;
@@ -319,14 +293,12 @@
                         _token: $('meta[name="csrf-token"]').attr('content')
                     };
 
-                    // Show loading state
                     $(this).prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Processing...');
 
                     $.post('/transactions/lend', payload)
                         .done(function(res) {
                             if (res.success) {
-                                alert(res.message);
-                                location.reload();
+                                generateReceipt(res.transaction, selectedBooksData, $('#member-id option:selected').text());
                             } else {
                                 alert(res.message);
                             }
@@ -340,10 +312,164 @@
                         });
                 });
 
+                // Function to generate receipt
+                function generateReceipt(transaction, books, memberInfo) {
+                    // Create receipt HTML
+                    let receiptHTML = `
+                <div class="receipt-content">
+                    <h4 class="text-center mb-3">LIBRARY BOOK LENDING RECEIPT</h4>
+                    
+                    <div class="receipt-meta mb-3">
+                        <div><strong>Date:</strong> ${new Date(transaction.borrow_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+                        <div><strong>Time:</strong> ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
+                        <div><strong>Transaction #:</strong> ${transaction.id}</div>
+                    </div>
+                    
+                    <div class="member-info mb-3">
+                        <strong>Member:</strong> ${memberInfo}
+                    </div>
+                    
+                    <table class="table table-sm receipt-table">
+                        <thead>
+                            <tr>
+                                <th>Book ID</th>
+                                <th>Title</th>
+                                <th>Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+                    // Add books to receipt
+                    books.forEach(book => {
+                        receiptHTML += `
+                    <tr>
+                        <td>${book.book_id}</td>
+                        <td>${book.title}</td>
+                        <td>${new Date(transaction.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                    </tr>
+                `;
+                    });
+
+                    receiptHTML += `
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2"><strong>Total Items:</strong></td>
+                                <td><strong>${books.length}</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    
+                    <div class="receipt-notice text-center mt-3">
+                        <small class="text-muted">* Books must be returned by due date to avoid fines of ₽50.00 per day</small>
+                    </div>
+                </div>
+            `;
+
+                    // Insert into modal and show
+                    $('#receiptContent').html(receiptHTML);
+                    const receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
+                    receiptModal.show();
+
+                    // Set up print button
+                    $('#printReceiptBtn').off('click').on('click', function() {
+                        const printContent = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Lending Receipt</title>
+                        <style>
+                            body { 
+                                font-family: 'Courier New', monospace;
+                                font-size: 12px;
+                                width: 80mm;
+                                margin: 0 auto;
+                                padding: 10px;
+                            }
+                            h4 { 
+                                text-align: center; 
+                                margin: 5px 0 10px 0;
+                                font-size: 14px;
+                                font-weight: bold;
+                            }
+                            .receipt-meta div {
+                                margin-bottom: 3px;
+                            }
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin: 10px 0;
+                            }
+                            th {
+                                text-align: left;
+                                border-bottom: 1px dashed #000;
+                                padding: 3px 0;
+                            }
+                            td {
+                                padding: 3px 0;
+                            }
+                            tfoot td {
+                                border-top: 1px dashed #000;
+                                padding-top: 5px;
+                            }
+                            .receipt-notice {
+                                margin-top: 15px;
+                                font-size: 10px;
+                                text-align: center;
+                            }
+                            @page {
+                                size: auto;
+                                margin: 0mm;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        ${$('#receiptContent').html()}
+                    </body>
+                    </html>
+                `;
+
+                        const printWindow = window.open('', '_blank');
+                        printWindow.document.write(printContent);
+                        printWindow.document.close();
+
+                        printWindow.onload = function() {
+                            setTimeout(() => {
+                                printWindow.print();
+                                printWindow.close();
+                            }, 200);
+                        };
+                    });
+
+                    // Refresh page when modal is closed
+                    $('#receiptModal').on('hidden.bs.modal', function() {
+                        location.reload();
+                    });
+                }
             });
         </script>
 
-
+        <!-- Receipt Modal (place this near the end of your body) -->
+        <div class="modal fade" id="receiptModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">Lending Receipt</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="receiptContent">
+                        <!-- Receipt content will be dynamically inserted here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="printReceiptBtn" class="btn btn-primary">
+                            <i class="bi bi-printer"></i> Print Receipt
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 </x-sidebar>
 @vite('resources/js/pagination.js')

@@ -18,3 +18,4 @@ document.getElementById("cancel-btn").addEventListener("click", function () {
     document.getElementById("book-card").style.display = "block";
     document.getElementById("add-book-form-card").style.display = "none";
 });
+import "../css/lend.css";
