@@ -6,6 +6,7 @@ use App\Models\Transaction;
 use App\Models\TransDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class AdminReportController extends Controller
 {
